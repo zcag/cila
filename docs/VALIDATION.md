@@ -124,6 +124,11 @@ accessible) rather than promise prose-summoned spectacle.
 
 The blocking Impact/wow axis (#6 in the table) must judge the signature moment for **meaning** — does it dramatize the product's core idea? — since a presence/size gate cannot catch a hollow-but-present animation.
 
+### Status — built in the v0.3.0 prune
+Done: mandatory reference-anchor (1) · contracted/named signature moment in `DESIGN.md` (2) · **blocking** Impact/wow axis that also judges *meaning* (4) · first-cut **hard-stop** checkpoint (5) · de-biased direction, "don't free-associate to cream-editorial" (6) · signature-moment **carve-out** + de-fanged reduced-motion gate, so the hero isn't throttled (7) · **asset-led wow** rewrite — video/Rive/Lottie/embed/components over hand-rolled CSS (8).
+Still open: a **deterministic centerpiece gate** with size/real-media teeth (3) — for now we rely on the blocking judge, not a hard gate; and **fast hero-only preview** (9) — needs a harness-level change, the ~20-min rebuild loop is unchanged.
+**Next:** re-run mira + a from-scratch build and confirm the *output* actually changes — the only test that matters.
+
 **Validation rule:** after building these, re-run mira (and the from-scratch test) and
 confirm the *output* changes — never trust the prose again. A gate that doesn't move real
 output is theater; cut it.

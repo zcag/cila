@@ -24,7 +24,7 @@ Feature-detect with `@supports`; un-enhanced browsers show the static end-state 
 ## Library choice (for the JS cases)
 - **React:** `motion` (import from `motion/react`) — MIT, hybrid WAAPI engine. Prefer it over GSAP for generated output (GSAP is Webflow-owned with a license barring competing tools).
 - **Static HTML / Astro:** CSS-only — native scroll-driven timelines (above), staggered `animation-delay`, `@keyframes`. Add `tailwindcss-motion` / `tailwind-animations` for cheap class-based reveals.
-- **Page-to-page / element morphs:** don't animate these by hand — use the `view-transitions` skill (native View Transitions API).
+- **Page-to-page / element morphs:** don't animate by hand — use the native **View Transitions API**. Same-doc: `document.startViewTransition(() => updateDOM())` (Baseline). Cross-doc: `@view-transition { navigation: auto }` on both pages (Chromium+Safari; Firefox flagged → degrades to plain nav; same-origin only). Give a shared `view-transition-name` to one hero/heading/image and it *morphs* instead of crossfading — reserve for the one signature continuity moment; names must be unique per snapshot. Astro: `<ClientRouter />` + `transition:name`. Guard it: under reduced-motion set `::view-transition-group(*){animation:none}` (or skip the wrapper) — keep the instant DOM swap.
 
 ## Non-negotiable rules
 - **Animate `transform` and `opacity` only** (compositor/GPU). Never `width/height/top/left/margin`; never `transition: all` — list properties.

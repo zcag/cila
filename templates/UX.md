@@ -45,4 +45,4 @@ For each screen, mark the states that apply and note its forms / table / primary
 - **KPIs (≤~5, actionable):** <…> · top-left = #1 (F-pattern) · drill-down to <…> · no vanity widgets / sprawl.
 
 ## Components & accessibility
-- Build on **shadcn-on-Radix** (WAI-ARIA APG contracts); escalate to React Aria for combobox / date picker / data grid / complex selection. Every interactive component: keyboard-operable, focus-managed (trap+restore on modals, focus on route change), `aria-live` for async, target ≥24px, `prefers-reduced-motion`. (See `a11y-patterns`.)
+- Build on **shadcn-on-Radix** (WAI-ARIA APG contracts); escalate to React Aria for combobox / date picker / data grid / complex selection. Every interactive component: keyboard-operable, focus-managed (trap+restore on modals, focus on route change), `aria-live` for async, target ≥24px, `prefers-reduced-motion`. (See `app-ux`.)

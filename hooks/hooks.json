@@ -6,10 +6,6 @@
           {
             "type": "command",
             "command": "test -f DESIGN.md && echo '[cila] This repo is cila-enabled and has a DESIGN.md design contract. Read it and treat it as the source of truth for all UI work; run `npm run gate` before shipping.' || true"
-          },
-          {
-            "type": "command",
-            "command": "ls \"${CLAUDE_PLUGIN_DATA}/cila/taste/\"/*.md >/dev/null 2>&1 && echo '[cila] Saved taste preferences exist in ${CLAUDE_PLUGIN_DATA}/cila/taste/. Before generating UI, load the relevant page-type/brand keys + global.md (the `taste` skill explains retrieval) and treat them as strong priors — the brief still wins.' || true"
           }
         ]
       }

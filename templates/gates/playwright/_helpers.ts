@@ -13,36 +13,13 @@
  * read *resolved* values via `getComputedStyle(document.documentElement)`.
  */
 
-import type { Page, TestInfo } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 // ---------------------------------------------------------------------------
-// Warn-level findings
+// Shared constants
 // ---------------------------------------------------------------------------
 
-/**
- * Record an *advisory* finding without failing the test. Heuristic gates (INP
- * responsiveness checklist, JSON-LD presence, native-overlay a11y) detect
- * patterns that are *usually* but not *always* problems — a hard fail would be
- * flaky and erode trust. Instead we:
- *   - attach the findings to the Playwright report (visible in `gate:report`),
- *   - annotate the test (shows as a yellow tag), and
- *   - print to stderr so a CI log surfaces it.
- * The test still passes. Genuine *facts* (layout, tokens, a11y, motion) stay
- * hard fails in their own specs; warn() is only for the heuristic frontier gates.
- */
-export function warn(testInfo: TestInfo, title: string, findings: string[]): void {
-  if (!findings.length) return;
-  const body = `${title}\n` + findings.map((f) => `  • ${f}`).join('\n');
-  testInfo.annotations.push({ type: 'warn', description: `${title} (${findings.length})` });
-  void testInfo.attach(`warn-${title.replace(/\W+/g, '-').toLowerCase()}.txt`, {
-    body,
-    contentType: 'text/plain',
-  });
-  // eslint-disable-next-line no-console
-  console.warn(`\n⚠ [cila warn] ${body}\n`);
-}
-
-/** Viewport matrix every layout/a11y/visual gate runs across. */
+/** Viewport matrix the a11y + reduced-motion gates run across. */
 export const VIEWPORTS = [
   { name: 'mobile', width: 360, height: 800 },
   { name: 'tablet', width: 768, height: 1024 },
@@ -61,26 +38,6 @@ export const ROUTES = (process.env.CILA_ROUTES ?? '/')
   .split(',')
   .map((r) => r.trim())
   .filter(Boolean);
-
-/**
- * Spacing rhythm. cila keeps **margins on a 4px grid** (`CILA_GRID`, default 4)
- * but allows **padding / gap on a finer 2px sub-grid** (`CILA_PADDING_GRID`,
- * default 2). The sub-grid exists because Tailwind v4 half-step utilities are
- * legitimate, idiomatic design tokens: with `--spacing: 0.25rem` (4px),
- * `py-1.5` / `gap-1.5` = 6px and `px-2.5` = 10px. Those sit on a 2px rhythm,
- * not the 4px grid, yet are first-class Tailwind utilities — so we permit them
- * for the *inner* spacing props (padding, gap) while still holding *outer*
- * rhythm (margin) to the full 4px grid. Set `CILA_PADDING_GRID=4` to forbid
- * half-steps entirely.
- */
-export const GRID = Number(process.env.CILA_GRID ?? 4);
-export const PADDING_GRID = Number(process.env.CILA_PADDING_GRID ?? 2);
-
-/**
- * Sub-pixel / hairline tolerance (px). Borders, transforms and fractional
- * device-pixel rounding legitimately produce values just off the grid.
- */
-export const HAIRLINE_TOLERANCE = 1.5;
 
 // ---------------------------------------------------------------------------
 // Color normalization
@@ -270,40 +227,6 @@ export async function buildColorAllowSet(page: Page): Promise<string[]> {
   const set = new Set<string>();
   for (const c of raw) set.add(baseColor(c));
   return [...set];
-}
-
-/**
- * Build the numeric type scale (font sizes in px) from `--text-*` / `--font-size-*`
- * custom properties on `:root`. Tailwind v4 `@theme` emits `--text-sm`, `--text-base`
- * etc.; DTCG/Style Dictionary output tends to emit `--font-size-*`. Falls back to a
- * conventional modular scale if none are declared.
- */
-export async function buildTypeScale(page: Page): Promise<number[]> {
-  const sizes = await page.evaluate(() => {
-    const cs = getComputedStyle(document.documentElement);
-    const probe = document.createElement('span');
-    probe.style.display = 'none';
-    document.body.appendChild(probe);
-    const toPx = (value: string): number => {
-      probe.style.fontSize = '';
-      probe.style.fontSize = value;
-      return parseFloat(getComputedStyle(probe).fontSize) || 0;
-    };
-    const out = new Set<number>();
-    for (let i = 0; i < cs.length; i++) {
-      const name = cs[i];
-      if (!name.startsWith('--')) continue;
-      if (!/(^--text-|^--font-size-)/.test(name)) continue;
-      const px = toPx(cs.getPropertyValue(name).trim());
-      if (px > 0) out.add(Math.round(px * 100) / 100);
-    }
-    probe.remove();
-    return [...out];
-  });
-
-  if (sizes.length) return sizes.sort((a, b) => a - b);
-  // Fallback modular scale (px) — only used when a repo ships no type tokens.
-  return [12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72];
 }
 
 // ---------------------------------------------------------------------------

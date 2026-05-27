@@ -2,6 +2,8 @@
 
 Staged so the lean core ships first and stays short/dense/readable. Phase 1 is the product; 2 and 3 are upgrades added only when a real project demands them.
 
+> **v0.3.0 — the prune.** The system was cut to its working core: **21→10 skills**, **6→4 agents**, **11→4 gates**. Dropped `bench`/`cila-Bench`, `taste`, `explore`, and the whole **best-of-N** / pairwise-Elo / `design-explorer` machinery; `a11y-auditor` folded into the single `design-reviewer`. Wow reframed to **asset-led + a named signature-moment carve-out**. The checkboxes below are kept as history — where they describe pruned mechanisms (best-of-N, bench, taste, explore, Planner/features.json, the dropped gates), treat the prune note + [`DECISIONS.md`](DECISIONS.md) `[prune]` entry as ground truth.
+
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 
 ---

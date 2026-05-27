@@ -46,5 +46,8 @@ Reach for the platform before JS or libraries — these are Baseline and reduce 
 - **CSS anchor positioning** for tethered UI (tooltips, menus, popovers) — `anchor()` / `position-anchor` replaces the Floating UI dep.
 - **Native `popover` / `<dialog>` / invoker commands** for overlays/menus/modals — browser-managed top layer + focus trapping + ESC/light-dismiss = an **a11y correctness win** over hand-rolled modal JS. Prefer these over a JS modal library.
 
+## Icons (commit to ONE set — mixing is a slop tell)
+Discover by intent via the keyless **Iconify** API (200k+ icons): `GET https://api.iconify.design/{prefix}/{name}.svg`. For the build, install ONE set matching the `DESIGN.md` tone, tree-shaken: **Phosphor** (`@phosphor-icons/react`, most character, duotone), **Lucide** (`lucide-react`, clean — but don't default *everywhere*, that's a tell), **Tabler** (crisp 2px outline), or **Hugeicons** (widest). Size + stroke from the type scale; color from tokens. Decorative icons `aria-hidden`; icon-only buttons get an `aria-label` (the a11y gate enforces this).
+
 ## How to use
 At direction time, the design-director proposes directions drawn from these families and locks the choice into `DESIGN.md`. During build, if something reads generic, run this list as a checklist and fix at the token/structure level — not with surface tweaks.

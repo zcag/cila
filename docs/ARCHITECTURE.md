@@ -18,14 +18,14 @@ cila/
 ├── skills/
 │   ├── go/                   # THE front door: /cila:go (also auto-invoked). Orchestrates everything
 │   ├── content:              # content-structure · copywriting · voice
-│   ├── design:               # design-tokens · frontend-aesthetics · motion · reference-extract · inspiration · icons
-│   └── wow:                  # wow · r3f · shaders · hero-art · 3d-assets · explore
+│   ├── design:               # design-tokens · frontend-aesthetics · motion · inspiration  (inspiration sources AND decomposes references)
+│   ├── wow:                  # wow  (asset-led; folds in r3f/shaders/hero-art/3d-assets/view-transitions)
+│   └── app:                  # app-ux  (folds in ux-states + a11y-patterns)
 ├── agents/                   # internal machinery the orchestrator delegates to (the user never calls these directly)
 │   ├── content-strategist.md # the message/positioning — "what to say"
-│   ├── design-director.md    # the aesthetic direction — "how it looks" (reads CONTENT.md)
-│   ├── design-explorer.md    # builds ONE best-of-N candidate (used by the explore skill)
-│   ├── design-reviewer.md    # evaluator: screenshots + gates + critique (visual + copy); never self-grades
-│   └── a11y-auditor.md        # WCAG 2.2 AA behavioral checks
+│   ├── design-director.md    # the aesthetic direction — "how it looks" (reads CONTENT.md; reference-anchored; names the signature moment)
+│   ├── design-reviewer.md    # the single evaluator: render-health → gates → behavioral a11y → visual + copy critique → blocking Impact/wow; never self-grades
+│   └── ux-architect.md       # application IA/nav/shell/flows — "how it works" (apps, not marketing)
 ├── hooks/
 │   └── hooks.json            # SessionStart (announce DESIGN.md contract) ; Stop/SubagentStop (gate reminder)
 ├── .mcp.json                 # shadcn, playwright (free, keyless) ; paid/keyed integrations opt-in (see INTEGRATIONS.md)
@@ -40,7 +40,7 @@ your-site/
 ├── src/styles/tokens.css     # Tailwind v4 @theme, OKLCH, single --brand-hue
 ├── components.json           # shadcn + namespaced registries wired
 ├── CLAUDE.md                 # pins aesthetic + registry lanes + WCAG/perf rules + "this repo is cila-enabled"
-└── (axe · lighthouse-ci · token-conformance · layout-invariant · design-lint configs)
+└── (axe · token-conformance · reduced-motion · lighthouse-ci · stylelint color-literal configs)
 ```
 
 ## "Point any agent at it" — three paths
@@ -53,26 +53,28 @@ your-site/
 
 ```
 /cila:go ──> assess silently (new vs existing · framework · intent) — only ask about the look
-        │    └─ if no DESIGN.md: design-director proposes 3–5 distinct directions →
-        │       decide WITH the user → lock DESIGN.md + tokens.css
+        │    └─ if no DESIGN.md: design-director proposes distinct directions, ANCHORED on
+        │       real references → decide WITH the user → lock DESIGN.md + tokens.css
+        │       (the ONE signature moment is concretely NAMED in DESIGN.md)
         │
         ▼
-   Planner ──> features.json (binary `passes`) + plan          [file-mediated handoff]
-        │
+   Build ──> from DESIGN.md + shadcn MCP (free premium registries); real copy, no lorem
+        │       asset-led wow moment ; FIRST CUT is a hard checkpoint, then chunks
         ▼
-   Generator ──> builds from DESIGN.md + shadcn MCP (free premium registries)
-        │           one feature at a time
-        ▼
-   design-reviewer (evaluator subagent, own context) ──> Playwright MCP:
+   design-reviewer (single evaluator subagent, own context) ──> Playwright MCP:
         screenshot matrix (360/768/1024/1440 × light/dark × hover/focus/empty/error)
         → render-health gate (invalid render = reject)
+        → run the 4 lean gates (below)
+        → behavioral a11y checks
         → critique vs DESIGN.md (Design/Originality/Craft/Functionality)
-        → pivot-or-refine ; accept only on strictly-better score
+        → blocking Impact/wow axis (returns HOLD, not a note)
+        → refine until PASS
         │
         ▼
-   Production gates (hard, derived from DESIGN.md/DTCG):
-        axe-core (WCAG 2.2 AA) · token conformance (computed-style) · layout invariants
-        · Lighthouse CI budgets · design-lint · Playwright visual regression
+   Production gates (the 4 lean set + 1 guard, hard, derived from DESIGN.md):
+        axe-core (WCAG 2.2 AA) · token conformance (computed-style)
+        · reduced-motion fallback · Lighthouse CI / CWV budgets
+        · stylelint color-literal guard
         │
         ▼
    Human gate on taste-sensitive calls → ship
@@ -101,4 +103,4 @@ Depend on / wire in, with attribution:
 
 ## Cost posture
 
-100% free stack by default. The only recurring cost is Claude plan quota; the visual loop is heavier (vision tokens ~3x). Mitigations: cap screenshots/cycle, review on demand (not every edit), N=3 for best-of-N, reserve multi-judge panels for tie-breaks. Pro component tiers (Aceternity/Magic UI Pro ~$199) and Chromatic/Figma remain optional, never required.
+100% free stack by default. The only recurring cost is Claude plan quota; the visual loop is heavier (vision tokens ~3x). Mitigations: cap screenshots/cycle, one lean review pass (not every edit). Pro component tiers (Aceternity/Magic UI Pro ~$199) and Chromatic/Figma remain optional, never required.

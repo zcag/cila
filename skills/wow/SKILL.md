@@ -1,40 +1,38 @@
 ---
 name: wow
-description: The playbook for jaw-dropping, award-tier hero moments — 3D, shaders, generative backgrounds, custom hero art, orchestrated motion, showing the product — without breaking accessibility or performance. Use BY DEFAULT for any hero-led marketing build (opt out only for deliberately minimal), and whenever a build should be striking rather than merely tasteful.
+description: The playbook for striking, award-tier hero moments that make people stop — led by REAL assets (product video, Rive/Lottie, live embeds, premium components) over hand-rolled CSS, plus shaders/3D/canvas, with a signature-moment carve-out so the hero can be spectacular without the page-level gates throttling it. Use BY DEFAULT for any hero-led marketing build (opt out only for deliberately minimal), and whenever a build must be striking, not merely tasteful.
 ---
 
-# Wow — the jaw-dropping playbook
+# Wow — the striking-hero playbook
 
-Goal: a hero/experience that makes people stop. The failure mode is two-sided — generic (no wow) *and* gaudy/janky/inaccessible (wrong wow). This playbook keeps it intentional and shippable.
+Goal: a hero that makes people stop. Two failure modes: **generic** (no wow — the common one) and **gaudy/janky** (wrong wow). Hard lesson from real builds: *a coding agent prompted in prose reliably produces tasteful-but-generic motion* — staggered fades it can't escape. So wow comes from a **concept + a real asset**, not from hand-rolled CSS hoping to feel premium.
 
-## First, get the concept (don't reach for tech yet)
-Jaw-dropping starts with an *idea*, not an effect. Before any 3D/shader:
-1. **Anchor on real award-tier work.** Use the `reference-extract` skill — pull 2–3 references from Awwwards/Godly/Land-book (via the Steel MCP) or ones the user names, and decompose the *concept* (what makes it memorable: a single bold gesture, a material, a motion idea), not the pixels.
-2. **Commit to at least one signature moment** from `DESIGN.md` — *more if the concept genuinely earns it*, but each must earn its place; don't scatter low-value effects. One unforgettable thing executed flawlessly beats five fighting each other — and two deliberate moments beat one when the concept calls for it. Everything else stays quiet to let them land.
+## 1. Concept first (idea, not effect)
+- **Anchor on real award-tier work — mandatory, not optional.** Pull 2–3 references (Awwwards / Godly / Land-book via a browser MCP, or ones the user names) with the `inspiration` skill, and decompose the *concept* — the one bold gesture / material / motion idea — not the pixels.
+- **Commit to a concrete, NAMED signature moment** in `DESIGN.md` — not "a moment," but *the* moment ("hero = the product rendering itself, live"). More only if the concept earns it; never scatter. When the product's value is visual, **the product demonstrating itself IS the wow** — show it big and real, never an abstract illustration.
 
-## The wow menu (tiered by weight — prefer the lightest that achieves the concept)
+## 2. Pick the medium — real assets beat generated CSS (in order of impact)
+1. **Real product video / screen-recording** — the truth, recorded. How Linear / Vercel / Notion do their hero. Highest meaning-per-effort for a real product. `<video>` muted/looping/`playsinline` + poster, ≤~6s, compressed (or animated AVIF/WebP).
+2. **Live product embed** — render the actual product in the hero (uniquely available when it's *your* product). Maximum authenticity.
+3. **Designed motion asset — Rive / Lottie** — bespoke vector animation built in a real tool (`@rive-app/react-canvas`, or Lottie) for a *meaningful* sequence (e.g. a transformation) that CSS can't convincingly fake.
+4. **Premium interaction components** — React Bits / Aceternity / Magic UI (animated backgrounds, beams, text effects) via the shadcn MCP, **retuned to brand tokens**. Pre-built award-tier, not improvised.
+5. **Shaders / 3D / canvas** — GLSL backgrounds (flowing gradients, fbm noise, domain warp), R3F scenes, particle fields, custom/AI hero art. See `${CLAUDE_PLUGIN_ROOT}/templates/wow/r3f/` (ShaderHero, FloatingObject) + `templates/wow/css/` (MeshGradient, Grain). Astro → islands (`client:visible`); Next → `dynamic(ssr:false)`. Brand hue as a uniform; cap DPR; pause offscreen. (AI hero art needs an image-gen key — optional.)
+6. **Pure CSS** — mesh-gradient + grain; native scroll-driven reveals (`animation-timeline: view()`, off-main-thread — see `motion`); **View Transitions** morphs across navigation (shared `view-transition-name` on one hero/heading/image → it morphs instead of crossfading; reduced-motion disables the anim, keeps the DOM swap; same-origin only, Firefox cross-doc flagged → degrades gracefully). Cheapest, weakest — use to *support* a signature, rarely AS the signature.
 
-**Tier 1 — zero-dependency (CSS/SVG), works in static Astro:**
-- Animated **mesh-gradient** backgrounds driven by the brand hue; **grain/noise** overlays for depth; **native scroll-driven** reveals (`animation-timeline: scroll()/view()`, off-main-thread — the default for reveals, see `motion`); CSS 3D transforms / perspective; oversized expressive type with variable-font animation.
-- **View Transitions** — animated route changes + hero/heading/image **morphs** across navigation (native, GPU-driven, no library). Often *the* "feels-2026" moment for multi-page sites → the `view-transitions` skill.
-- Reach here first — see `${CLAUDE_PLUGIN_ROOT}/templates/wow/css/` and the `motion` skill.
+Prefer the lightest medium that genuinely delivers the *concept* — but don't default to CSS just because it's easy; that's exactly how you get tasteful-not-striking.
 
-**Tier 2 — React islands (depth & immersion):**
-- **GLSL shader** backgrounds (flowing gradients, fbm noise, domain warp) → the `shaders` skill + `templates/wow/r3f/ShaderHero`.
-- **3D** scenes / floating distorted meshes / particle fields → the `r3f` skill + `templates/wow/r3f/`.
-- **Orchestrated motion** (staggered entrance, spatial continuity, scroll storytelling) → `motion` skill + `templates/wow/motion/`.
-- In Astro, mount as islands (`@astrojs/react`, `client:visible`); in Next, dynamic import `ssr:false`.
+## 3. The signature-moment carve-out (so wow isn't throttled)
+The one designated signature moment may use **richer techniques than the rest of the page** — layout animation, canvas/WebGL, video — and is **exempt from the page's compositor-only / strict-CLS conventions**, on two conditions:
+- **Isolate it** — render inside a `<canvas>`, `<video>`, or a contained / absolutely-positioned layer so it doesn't shift page layout (overall CLS stays clean).
+- **The non-negotiables below still hold.** Everything *outside* the carve-out stays calm and clean.
 
-**Custom hero imagery (optional, needs an API key):**
-- AI-generated hero art / textures / OG images via an image-gen MCP (Nano Banana / fal) → optimize with `sharp`. Bespoke art beats stock. Wire only when the user has a key; otherwise stay on shaders/3D/CSS (all free, no key).
+This is deliberate: the production gates are right for the whole page and were a cage for the one hero moment — the carve-out frees it.
 
-**Premium component sources:** React Bits (animated backgrounds/text), Aceternity (beams/spotlight/3D cards), Magic UI (motion polish) — pulled via the shadcn MCP, then **retuned to the brand tokens** so they read as one designed thing.
-
-## Non-negotiable guardrails (wow that ships)
-- **Accessibility is never traded for spectacle.** Every animation has a `prefers-reduced-motion` path (static frame / disabled loop). 3D/canvas content keeps the page keyboard-usable and provides a meaningful fallback. cila's a11y + reduced-motion gates apply to showcase pages too and are hard fails.
-- **Perf is budgeted, not ignored.** Heavy hero → run the gates with the **showcase Lighthouse profile** (looser LCP/TBT) — but CLS stays strict, animations stay compositor-only (`transform`/`opacity`), and `non-composited-animations` stays a hard fail. Lazy-load/code-split Tier-2 islands, cap DPR, pause render when offscreen.
+## Guardrails (wow that ships)
+- **Accessibility is never traded for spectacle.** Every animation has a `prefers-reduced-motion` path (static frame / no loop); video gets a static poster. Canvas/3D keeps the page keyboard-usable with a meaningful fallback. The a11y + reduced-motion gates are hard fails — carve-out included.
+- **Perf is budgeted, not ignored.** Heavy hero → showcase Lighthouse profile (looser LCP/TBT). Lazy-load/code-split islands, compress assets.
+- **Tokens, not hardcoded color.** Nothing bypasses the token system.
 - **One moment, not everything.** Restraint is what reads as premium.
-- **Tokens, not hardcoded color.** Shaders/3D take the brand hue as a uniform; nothing bypasses the token system.
 
 ## Flow
-Concept (references) → commit one signature moment → pick the lightest tier that delivers it → build with the `r3f`/`shaders`/`motion` skills + `templates/wow` components → reduced-motion fallback → `design-reviewer` (showcase perf profile, strict a11y) → iterate until it lands.
+Concept (mandatory references) → name one signature moment in `DESIGN.md` → pick the medium (asset over CSS) → build it in an isolated carve-out → reduced-motion fallback → `design-reviewer` (showcase perf, strict a11y, judges the moment for *meaning*, not just presence) → iterate until it lands.

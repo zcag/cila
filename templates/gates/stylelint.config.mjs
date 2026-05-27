@@ -12,8 +12,8 @@
  * Tailwind arbitrary values (`bg-[#abc123]`, `p-[13px]`) live in className
  * strings inside .astro/.tsx files, NOT in CSS, so stylelint can't see them.
  * They are guarded two ways:
- *   1. The rendered token-conformance + spacing-scale Playwright gates catch
- *      the *effect* of an arbitrary value (off-token color / off-grid spacing).
+ *   1. The rendered token-conformance Playwright gate catches the *effect* of an
+ *      arbitrary value (an off-token color that survives the build).
  *   2. Optionally add an ESLint rule (eslint-plugin-tailwindcss /
  *      `no-arbitrary-value`, or a `no-restricted-syntax` regex on `-[...]`)
  *      to fail arbitrary values at the markup layer. Wire it into `gate:tokens`
