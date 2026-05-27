@@ -17,6 +17,15 @@
  * This is the budget every NON-showcase page is held to. Hero/marketing routes
  * with an intentional jaw-drop moment use `lighthouserc.showcase.cjs` instead
  * (perf budget relaxes; a11y / CLS / non-composited-animations do NOT).
+ *
+ * INP / responsiveness: real INP is a FIELD metric (needs actual interactions +
+ * RUM, out of cila's build-time scope). Its lab proxy is TBT — asserted HARD
+ * below (`total-blocking-time` <= 200ms). Lab `interaction-to-next-paint` is
+ * asserted as WARN (lab INP is indicative, not authoritative). The deterministic
+ * INP *hygiene* checklist (no `transition: all`, compositor-only transitions,
+ * `content-visibility` on long pages, yield long handlers) lives in
+ * `playwright/responsiveness.spec.ts` (`gate:inp`, folded into `gate:perf`).
+ * Together: TBT is the hard floor, the checklist is the advisory companion.
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';

@@ -6,14 +6,17 @@
   "scripts": {
     "gate:tokens": "playwright test token-conformance spacing-scale && stylelint \"src/**/*.css\"",
     "gate:layout": "playwright test layout-invariants",
-    "gate:a11y": "playwright test a11y",
+    "gate:a11y": "playwright test a11y overlay-a11y",
+    "gate:schema": "playwright test schema",
+    "gate:inp": "playwright test responsiveness",
     "gate:visual": "playwright test visual-regression",
     "gate:visual:update": "playwright test visual-regression --update-snapshots",
     "gate:lh": "lhci autorun --config=lighthouserc.cjs",
     "gate:lh:showcase": "lhci autorun --config=lighthouserc.showcase.cjs",
+    "gate:perf": "npm run gate:inp && npm run gate:lh",
     "gate:motion": "playwright test reduced-motion",
     "gate:structural": "npm run gate:tokens && npm run gate:layout && npm run gate:a11y && npm run gate:motion",
-    "gate": "npm run gate:structural && npm run gate:lh",
+    "gate": "npm run gate:structural && npm run gate:schema && npm run gate:perf",
     "gate:report": "playwright show-report .gate-report"
   },
   "devDependencies": {

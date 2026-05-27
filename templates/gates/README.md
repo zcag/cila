@@ -29,10 +29,13 @@ signed off on the taste-sensitive calls.
 | **tokens** | `playwright/token-conformance.spec.ts` | 1 — hard | Every visible element's computed `color` / `background-color` / `border-color` is a member of the allow-set resolved from `:root` custom props. Membership is **alpha-agnostic** — see *Opacity modifiers* below. Catches hardcoded `#3b82f6` and Tailwind arbitrary values that survive the build. |
 | **tokens** | `playwright/spacing-scale.spec.ts` | 1 — hard | Computed **margin** lands on the 4px grid; **padding / gap** may land on the 2px sub-grid (Tailwind half-steps — see *Spacing rhythm* below). `font-size` ∈ the type scale read from `--text-*` / `--font-size-*` tokens. Catches "the agent picked 13px". |
 | **tokens** | `stylelint.config.mjs` | 1 — hard | Static source guard: bans raw hex / `rgb()` / `hsl()` / `oklch()` / `color()` / `lab()` / `lch()` / named colors in hand-authored CSS; forces color/shadow props through `var(--token)`. Runs before the build. |
-| **layout** | `playwright/layout-invariants.spec.ts` | 1 — hard | Across 360/768/1024/1440: no horizontal scroll (`scrollWidth ≤ clientWidth`), no element overflows the inline axis, touch targets ≥ 24×24 (WCAG 2.5.8), no unintended interactive overlap (rect math + `elementsFromPoint` hit-test). |
+| **layout** | `playwright/layout-invariants.spec.ts` | 1 — hard | Across 360/768/1024/1440: no horizontal scroll (`scrollWidth ≤ clientWidth`), no element overflows the inline axis, touch targets ≥ 24×24 (WCAG 2.5.8 — **with the spec's Inline / Spacing / focus-enlarge exceptions applied**, see *Touch-target exceptions* below), no unintended interactive overlap (rect math + `elementsFromPoint` hit-test). |
 | **a11y** | `playwright/a11y.spec.ts` | 1 — hard | `@axe-core/playwright` with tags `wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa`, run post-render across the viewport matrix. Full JSON attached to the report; zero violations required. |
+| **a11y (overlay)** | `playwright/overlay-a11y.spec.ts` | frontier — **warn** | Best-effort native-overlay check: any *open* dialog/menu should be a native `<dialog>` / `[popover]`, or a hand-rolled `[role=dialog]` with proper `aria-modal` + focus management. A `<div role="dialog">` open without a focus trap (no focus inside, no `[data-focus-trap]`) **warns**. Only inspects overlays already open at gate time (closed overlays → axe + manual SR check). |
+| **schema** | `playwright/schema.spec.ts` | frontier — **warn** | Parses every `<script type="application/ld+json">`; each must be well-formed JSON and at least one must carry an `@type`. Malformed / type-less blocks always warn; *absence* on an expected content route (scoped by `CILA_SCHEMA_ROUTES`) warns. Never hard-fails. |
+| **inp** | `playwright/responsiveness.spec.ts` | frontier — **warn** | INP/responsiveness *hygiene* checklist: no `transition: all`, compositor-only transitions (transform/opacity/filter), `content-visibility:auto` on long (>3×viewport) pages, and main-thread nudges (inline `on*` handlers, big inline `<script>`). Lab proxy for INP is **TBT in the Lighthouse gate** (hard); this is the deterministic advisory companion. |
 | **motion** | `playwright/reduced-motion.spec.ts` | 1 — hard | Under `prefers-reduced-motion: reduce`, across the matrix: the page must be effectively static — **no continuous `requestAnimationFrame` loop** driving a canvas (catches raw rAF churn *and* an R3F `frameloop` still rendering) — **or** a visible documented `[data-reduced-fallback]` substitute. Measures real rAF activity in-page; can't be charmed by a self-reported flag. Applies to showcase pages too. |
-| **lh** | `lighthouserc.json` | 2 — budget | Lighthouse CI: LCP < 2500ms, CLS < 0.1, TBT < 200ms (error); FCP/SI/INP (warn — INP is lab guidance, real INP needs field data); perf ≥ 0.9, a11y = 1.0, best-practices ≥ 0.95; non-composited-animations = 0. |
+| **lh** | `lighthouserc.cjs` | 2 — budget | Lighthouse CI: LCP < 2500ms, CLS < 0.1, **TBT < 200ms (error — the lab proxy for INP)**; FCP/SI/INP (warn — lab INP is indicative; real INP needs field data, out of build-time scope); perf ≥ 0.9, a11y = 1.0, best-practices ≥ 0.95; non-composited-animations = 0. The deterministic INP hygiene checklist is the `inp` gate above. |
 | **lh (showcase)** | `lighthouserc.showcase.json` | 2 — budget (opt-in) | **Relaxed *performance* budget for designated hero/marketing pages only.** LCP ≤ 4000ms, TBT ≤ 600ms, perf ≥ 0.6 (warn); script ≤ 2 MB, total ≤ 8 MB (error). Everything accessibility/layout-related stays strict: **CLS ≤ 0.1, non-composited-animations = 0, a11y ≥ 0.95, best-practices ≥ 0.95, unsized-images = 0** — same as (or matching) the default. Run via `gate:lh:showcase` and point its `url` at the hero route(s) only. |
 | **visual** | `playwright/visual-regression.spec.ts` | 2 — advisory | `toHaveScreenshot` per route × viewport with `animations:'disabled'`, dynamic regions masked via `[data-visual-dynamic]`, `maxDiffPixelRatio: 0.01`. Baselines are the accept/reject memory from the critique loop. |
 
@@ -66,6 +69,37 @@ signed off on the taste-sensitive calls.
   strings, invisible to stylelint. They're caught by their *effect* in the
   rendered token/spacing gates; optionally add an ESLint rule at the markup
   layer (see the header comment in `stylelint.config.mjs`).
+- **Touch-target exceptions (WCAG 2.5.8).** The 24×24 check now honors the
+  spec's documented exceptions so legit patterns don't false-positive — a
+  *genuinely small standalone control still fails*:
+  - **(a) Inline.** A target whose computed `display` is `inline*` **and** that
+    sits inside a flowing text block (its parent holds surrounding text) — a
+    link wrapped in a sentence — is exempt.
+  - **(b) Enlarges on focus.** A control that is collapsed / visually-hidden at
+    rest but grows to ≥ 24×24 once focused (skip-links,
+    visually-hidden-until-focus affordances) is exempt. The gate **actually
+    focuses it and re-measures** — not a self-reported flag.
+  - **(c) Sufficient spacing.** The spec's *Spacing* exception: a sub-24px
+    target is exempt if a 24px-diameter circle on its center doesn't intersect
+    any *other* target's circle. Approximated with each target's box expanded so
+    its smaller side reaches 24px, then checked against every other target's
+    expanded box (AABB analogue of the circle test).
+  See the header comment + `touch targets` test in
+  `playwright/layout-invariants.spec.ts`.
+- **Warn-level frontier gates.** `schema`, `inp`, and `overlay-a11y` detect
+  *heuristic* patterns (structured-data presence, INP hygiene, hand-rolled
+  overlays). Their detection has legitimate exceptions, so per cila's frontier
+  rule they **warn, never hard-fail** — findings are attached to the report
+  (`gate:report`), annotated on the test, and printed to stderr via the shared
+  `warn()` helper in `_helpers.ts`. Hard *facts* (layout/tokens/a11y/motion +
+  the Lighthouse CWV budget) remain the real fails.
+- **View-Transitions / Speculation-Rules (soft expectation).** On multi-page
+  builds, a same-document/cross-document **View Transition**
+  (`@view-transition` / the View Transitions API) and **Speculation Rules**
+  (`<script type="speculationrules">` prerender/prefetch) are *soft* signals of
+  a polished, instant-feeling navigation. cila does **not** gate on them (they're
+  progressive enhancements, easy to false-positive), but a multi-page build
+  that ships neither is leaving an easy win on the table — review by hand.
 
 ## Wow vs gates
 
@@ -98,14 +132,17 @@ reduced-motion, layout and tokens never do.*
 |--------|------|
 | `npm run gate:tokens` | token-conformance + spacing-scale specs + stylelint |
 | `npm run gate:layout` | layout-invariants spec |
-| `npm run gate:a11y` | axe-core a11y spec |
+| `npm run gate:a11y` | axe-core a11y spec **+ overlay-a11y (warn)** |
+| `npm run gate:schema` | JSON-LD structured-data presence spec (**warn**) |
+| `npm run gate:inp` | INP/responsiveness hygiene checklist spec (**warn**) |
 | `npm run gate:motion` | reduced-motion fallback spec (HARD) |
 | `npm run gate:visual` | visual-regression spec — **not in the aggregate `gate`**; needs seeded baselines (see below) |
 | `npm run gate:visual:update` | seed / refresh visual baselines (review the diffs!) |
 | `npm run gate:lh` | Lighthouse CI, **strict** profile (`lhci autorun --config=lighthouserc.cjs`) |
 | `npm run gate:lh:showcase` | Lighthouse CI, **relaxed-perf** showcase profile — hero/marketing pages only |
+| `npm run gate:perf` | INP checklist (`gate:inp`) → Lighthouse CWV (`gate:lh`) |
 | `npm run gate:structural` | tokens + layout + a11y + motion (all HARD gates) |
-| `npm run gate` | structural → lighthouse, in order (**`gate:visual` excluded** so a fresh repo isn't blocked on missing baselines) |
+| `npm run gate` | structural → schema → perf (INP checklist + Lighthouse), in order (**`gate:visual` excluded** so a fresh repo isn't blocked on missing baselines) |
 | `npm run gate:report` | open the Playwright HTML report |
 
 > **`gate:visual` is intentionally not part of the aggregate `npm run gate`.**

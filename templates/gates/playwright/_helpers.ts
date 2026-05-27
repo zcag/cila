@@ -13,7 +13,34 @@
  * read *resolved* values via `getComputedStyle(document.documentElement)`.
  */
 
-import type { Page } from '@playwright/test';
+import type { Page, TestInfo } from '@playwright/test';
+
+// ---------------------------------------------------------------------------
+// Warn-level findings
+// ---------------------------------------------------------------------------
+
+/**
+ * Record an *advisory* finding without failing the test. Heuristic gates (INP
+ * responsiveness checklist, JSON-LD presence, native-overlay a11y) detect
+ * patterns that are *usually* but not *always* problems — a hard fail would be
+ * flaky and erode trust. Instead we:
+ *   - attach the findings to the Playwright report (visible in `gate:report`),
+ *   - annotate the test (shows as a yellow tag), and
+ *   - print to stderr so a CI log surfaces it.
+ * The test still passes. Genuine *facts* (layout, tokens, a11y, motion) stay
+ * hard fails in their own specs; warn() is only for the heuristic frontier gates.
+ */
+export function warn(testInfo: TestInfo, title: string, findings: string[]): void {
+  if (!findings.length) return;
+  const body = `${title}\n` + findings.map((f) => `  • ${f}`).join('\n');
+  testInfo.annotations.push({ type: 'warn', description: `${title} (${findings.length})` });
+  void testInfo.attach(`warn-${title.replace(/\W+/g, '-').toLowerCase()}.txt`, {
+    body,
+    contentType: 'text/plain',
+  });
+  // eslint-disable-next-line no-console
+  console.warn(`\n⚠ [cila warn] ${body}\n`);
+}
 
 /** Viewport matrix every layout/a11y/visual gate runs across. */
 export const VIEWPORTS = [
