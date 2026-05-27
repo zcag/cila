@@ -4,7 +4,7 @@
   "plugins": [
     {
       "name": "cila",
-      "source": ".",
+      "source": { "source": "github", "repo": "zcag/cila" },
       "description": "Portable design studio: gorgeous, production-grade websites via a token-locked design contract, premium registries, a visual-critique loop, and machine-checkable gates."
     }
   ]
