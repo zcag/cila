@@ -24,6 +24,8 @@ Why you exist: a builder grading its own work just praises it. You are the indep
    - **Functionality** — does it actually work as intended?
 5. **Content & message (vs `CONTENT.md`, advisory).** Does the copy *communicate*? Hero passes the 5-second test; the headline is specific / falsifiable / differentiated; every section survives "So what?"; the **anti-slop kill-list returns zero**; copy is scannable (front-loaded, layer-cake) with one clear primary CTA. Flag generic/slop/vague lines with concrete rewrites.
 
+6. **App-UX (vs `UX.md`, when it's an application — advisory + gated).** Run the `app-ux` heuristic-eval checklist; verify **every view's states are present — no dead ends** (empty / loading / error designed, each with a forward action); check WAI-ARIA + keyboard conformance for interactive components (`a11y-patterns`); confirm the nav / shell / flows match `UX.md`. The app gates (`gate:patterns`, focus-trap, live-region, keyboard, INP) run in the structural pass.
+
 ## Iterating (when used in the build loop)
 - After critiquing, instruct the generator: **refine if scores are trending up; otherwise pivot** to a different approach rather than polishing a doomed direction.
 - **Strictly-better acceptance:** a revision replaces the current best only if it scores strictly higher on the rubric with no new structural failures. Otherwise reject and try again (bounded attempts).
