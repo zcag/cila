@@ -131,9 +131,9 @@ A two-agent review (prompt architecture + code/templates) was run and triaged; n
 
 ## Frontier directions (researched, not committed) — see `docs/RESEARCH-FRONTIER.md`
 
-Net-new directions beyond the core + Phase 2. Keystone = **measurement**. Pursue on demand.
+Net-new directions beyond the core + Phase 2. Keystone = **build-time measurement**. **cila is build-time only — no deployed-state / analytics / live-experiment work** (`[scope]` in DECISIONS). Pursue on demand.
 
-- **A — Measurable & self-improving (the moat):** `cila-Bench` (pairwise Elo scoreboard) + cross-family judge + human holdout; GEPA prompt-evolution; CIPHER diff→preference (self-writing taste); curated example bank; conversion writeback.
+- **A — Measurable & self-improving (the moat, build-time):** `cila-Bench` (pairwise Elo scoreboard) + cross-family judge + human holdout; GEPA prompt-evolution; CIPHER diff→preference (self-writing taste, from your edits); curated example bank. *(No production/conversion signal — dev-time only.)*
 - **B — Frontier web (cheap, anytime):** View Transitions, scroll-driven CSS default, Speculation Rules, INP gate, popover/dialog/invoker + anchor positioning (a11y + dep removal), `text-wrap: balance/pretty`, WebGPU+TSL, AEO/GEO content. (Skip `llms.txt`.)
-- **C — Launcher → lifecycle partner:** instrument-by-default (PostHog/Plausible + web-vitals attribution) → CRO loop via PostHog/GrowthBook MCP (agent drives experiments) → conversion→design writeback; programmatic pages + DS governance; i18n; redesign intelligence.
+- **C — Build-time scaling (NOT deployed-state):** programmatic/full-site pages + design-system governance; i18n; redesign-audit. *(Analytics instrumentation, live A/B/CRO, RUM, conversion writeback = OUT OF SCOPE.)*
 - **D — Harden the harness:** evidence/rubric-grounded + trajectory judging; verification-first frozen `ACCEPTANCE.md`; durable `.cila/progress.md` (read-before-act); diversity-preserving best-of-N; externally-gated bounded reflexion; skill routing + cost tiers at scale.

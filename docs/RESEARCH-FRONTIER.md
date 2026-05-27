@@ -2,7 +2,9 @@
 
 Forward-looking research for net-new directions beyond the built core (content + visual + production) and the deferred Phase 2. Four passes, 2026 sources. These are **options, not commitments** — see `ROADMAP.md` "Frontier directions". Ranked impact-vs-effort within each theme.
 
-The four themes converge on one thesis: **measurement is the keystone.** A scoreboard + production signal turns cila from "emits good sites" into "holds a model of the site and improves it against real outcomes." That loop is the moat no other AI design tool has.
+The four themes converge on one thesis: **measurement is the keystone** — a *dev-time* scoreboard + learning from the user's own edits turns cila from "emits good sites" into "measurably improves its taste over time."
+
+> **Scope boundary (decided):** cila is **build-time only** — it does **not** instrument, monitor, or run experiments on deployed sites. The production-feedback parts below (analytics instrumentation, live A/B/CRO, RUM, conversion→design writeback) are **OUT OF SCOPE**. Self-improvement comes from the user's **edits + the dev benchmark**, not production telemetry. (Build-time CWV/INP gates run against a local server in CI — that's fine.)
 
 ---
 
@@ -13,11 +15,11 @@ Honest 2026 finding: MLLM judges *rank* design adequately (Pearson ~0.7) but *sc
 Top mechanisms (build order 1→…):
 1. **cila-Bench** — a private frozen brief set (~30) + pairwise **TrueSkill/Elo** leaderboard comparing each cila version vs its predecessors and vs v0/Lovable/Bolt. *Without this, "self-improving" is unmeasurable.* (Model on **UI-Bench**.)
 2. **Cross-family judge + frozen human-rated holdout** — generate with Claude, judge with a *different* family (self-preference bias is real and persists even when authorship is hidden); validate the auto-judge against ~30–50 human-rated pages. The honesty anchor.
-3. **Instrument-by-default** (see Theme C #1) — unlocks the real signal.
+3. ~~Instrument-by-default / production signal~~ — **OUT OF SCOPE** (cila doesn't touch deployed state). The improvement signal is the user's edits + cila-Bench, not production data.
 4. **GEPA** (reflective prompt evolution; ICLR 2026 oral) over cila's orchestrator/subagent prompts, scored on cila-Bench — beats RL by 6–20% with ~35× fewer rollouts. The compounding engine.
 5. **CIPHER/PRELUDE diff→preference learning** — infer a one-line preference from each user *edit*, store keyed by context, retrieve k-nearest into the build prompt. A `taste.md` that **writes itself**. (PROSE adds a refinement loop so it doesn't drift.) The signature feature.
 6. **Curated example bank** (MemSkill-style) — every shipped, high-scoring page becomes a retrievable exemplar (gated by cila-Bench score). Best-of-N seeds from nearest exemplars. The compounding asset.
-7. **Conversion→design-system writeback** — the variant that *converted* is the strongest label; write "pattern X converted +Y% on segment Z" into the preference store (behind a significance gate).
+7. ~~Conversion→design-system writeback~~ — **OUT OF SCOPE** (depends on deployed analytics). Taste-learning relies on the user's accept/reject + edits instead.
 
 Eval honesty guards (load-bearing): cross-family judging, rotating/held-out rubric, conversion-significance gate, periodic adversarial human audit. Goodhart/self-preference/rubric-gaming are documented and real.
 
@@ -50,11 +52,11 @@ Sources: [web.dev: same-doc VT Baseline](https://web.dev/blog/same-document-view
 
 ---
 
-## Theme C — Launcher → lifecycle partner (close the production loop)
+## Theme C — Build-time scaling (NOT deployed-state)
 
-Conceptual upgrade: cila stops *emitting a site* and starts *holding a model of it* (event schema, token contract, entity graph, experiment ledger) and editing it against real outcomes.
+> **Tier 1 below (instrumentation, live CRO loop, traffic-based testing) is OUT OF SCOPE** per the build-time-only boundary — kept for the record. What survives is the **build-time** scaling in Tier 2/3: programmatic pages, design-system governance, i18n, redesign-audit (reading an existing site as *input*, not monitoring a deployment).
 
-Tier 1 (highest leverage; agent-feasible now):
+Tier 1 — ~~production loop~~ **(OUT OF SCOPE — deployed-state / analytics / live experiments):**
 1. **Auto-instrument every generated site** — Plausible (cookieless, content sites) or **PostHog** (analytics+replay+flags+experiments). Bake in `web-vitals` *attribution* build (which element caused bad INP/CLS) + a small versioned event schema (CTA/scroll/funnel) auto-tagged on the components cila generates. *Unlocks everything downstream.*
 2. **CRO as a closed loop via MCP** — **PostHog MCP** (`experiment-create`, `query-run`) and **GrowthBook MCP** (create tests, read results) let cila *propose → launch → read* experiments, then feed winners back (Theme A #7). Vercel Edge Config/Flags for sub-ms edge A/B.
 3. **CRO backlog / "what to test"** (pure LLM, no traffic needed) — audit the page against evidence-ranked priors (headline → social proof → hero → form → CTA), emit an ICE-ranked hypothesis list + auto-generate variants.
@@ -87,4 +89,4 @@ Sources: [Anthropic — long-running harnesses](https://www.anthropic.com/engine
 ---
 
 ## Recommended sequencing (if pursued)
-The keystone is **measurement**: build **cila-Bench + the human-holdout honesty anchor (A1–A2)** and **instrument-by-default starters (C1)** first — they unlock GEPA (A4), taste-learning (A5), and the CRO loop (C2). In parallel, the **frontier-web upgrades (B)** are cheap, low-risk "stay sharp" wins doable anytime. The **harness hardening (D1–D5)** makes the existing loop more reliable and is mostly prompt-level. Lifecycle (C2/C3) and the wow-ceiling extras pay off once measurement exists.
+The keystone is **build-time measurement**: build **cila-Bench + the human-holdout honesty anchor (A1–A2)** first — they unlock GEPA (A4) and taste-learning from edits (A5). The **frontier-web upgrades (B)** are cheap, low-risk "stay sharp" wins doable anytime. The **harness hardening (D1–D5)** makes the existing loop more reliable and is mostly prompt-level. Build-time scaling (C Tier-2/3: programmatic pages, DS governance, i18n) is episodic. *(All deployed-state / analytics / live-experiment work is out of scope.)*
