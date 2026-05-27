@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.3.2 — 2026-05-27
+
+- **Fix (regression): the jargon-label picker is back to being forbidden — loudly.** A live run opened with an `AskUserQuestion` picker offering "Kinetic artifact gallery / Brutalist–Swiss poster / Luminous dark SaaS" — the exact pattern 0.1.2 banned. `design-director` now carries a hard, up-front directive: **do not use the `AskUserQuestion`/interactive-picker tool** for the direction; write options as plain prose; **never a bare aesthetic label** — every option as "\<plain feeling\> — like \<recognizable site\>"; self-check that a non-designer could picture each, with exactly one Recommended. (The directions themselves were appropriately bold — anti-timidity is landing; the failure was presentation.)
+
 ## 0.3.1 — 2026-05-27
 
 - **Sharper anti-timidity.** `design-director` and `wow` now state it plainly: on the signature moment there is **no "overdoing it"** — aim to make people *stop*, commit to the boldest cut first and pull back only if it's genuinely too much; **timidity is the only real failure**, "clean but forgettable" is a fail. Restraint still applies to *everything else* (one bold moment, quiet around it) — that contrast reads as premium. (Distilled from a review of the older forge landing setup, which set the bar with "there is no overdoing it.")
