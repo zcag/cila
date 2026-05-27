@@ -1,32 +1,104 @@
 # cila
 
-A portable **design studio for Claude Code** — it makes Claude produce *gorgeous, production-grade* websites instead of generic "AI slop."
+**A design studio for Claude Code.** Describe what you want — *"a landing page for a climate-data startup"* — and cila builds a site that looks **designed**, reads like a **pro wrote the copy**, and **passes production gates**. Not another generator of purple-gradient, Inter-font, three-card AI slop.
 
-`cila` is a self-contained Claude Code **plugin**: install it once and any agent in any repo can use it. It covers all three legs of web design — **content + visual + production**: a content/messaging strategy step (positioning, copy, voice), a collaborative aesthetic-direction step, a token-locked design contract, premium (free) component registries, a visual-critique build loop, and machine-checkable production gates.
+cila is a self-contained Claude Code **plugin**. Install it once; from then on a single entry point (`/cila:go`) — or just describing a site — runs the whole thing.
 
 > *cila* (Turkish): **polish, gloss** — the craft layer over raw components.
 
-## Why
+---
 
-The same model produces wildly different quality depending on the **harness** around it. `cila` is that harness, packaged. Its design rests on findings from deep research (see [`docs/RESEARCH.md`](docs/RESEARCH.md)):
+## The idea: an expert, wired into clever mechanisms
 
-1. **Input specificity** beats prompting — a committed aesthetic + a real design system + reference decomposition + explicit negative constraints.
-2. **A persistent design contract** (`DESIGN.md` + tokens) the model re-reads every session, so it can't drift back to Inter / purple gradients / three-card grids.
-3. **The agentic visual-critique loop** — a *separate* evaluator screenshots the rendered page and grades it; the generator never grades itself.
-4. **Premium component registries** instead of vanilla shadcn.
-5. **Production gates as hard enforcement** — a11y, perf, and computed-style token conformance that a pretty screenshot can't charm.
+The same model produces wildly different quality depending on the **harness** around it. cila is that harness. Two halves:
 
-## Status
+### 🎓 The expert — real craft knowledge, encoded
+Most "AI website" tools only know *components*. cila carries the knowledge a senior team would bring across **all three legs of web design**:
 
-**Phase 1 built** (the lean core). The entire interface is one thing — **`/cila:go`** — a model-invocable skill that also fires when you simply describe what you want ("a landing page for X", "redesign this", "make this page nicer"). It auto-detects everything (new vs existing repo, framework, scaffold vs adopt), collaborates with you *only* on the look, builds, and runs its production gates — no flags, modes, or jargon. Next: a live end-to-end validation run, then the compounding/scale phases — see [`docs/ROADMAP.md`](docs/ROADMAP.md).
+- **Content & messaging** — Dunford positioning, Jobs-To-Be-Done, the Value Proposition Canvas, Schwartz's 5 stages of awareness, StoryBrand narrative, conversion copywriting (PAS / BAB / FAB), voice-of-customer mining, brand voice charts, and a hard **anti-slop kill-list** (no "unlock your potential", no "we help businesses grow").
+- **Visual design** — a committed aesthetic direction (editorial, brutalist, luxury, retro-futuristic…) instead of the timid mean; OKLCH design-token systems from a single brand hue; distinctive typography (banned: Inter / Roboto / Space Grotesk); one orchestrated motion moment; a "wow" tier (View Transitions, scroll-driven CSS, shaders, WebGPU/3D).
+- **Production** — WCAG 2.2 AA, Core Web Vitals / INP, modern CSS, scannability, content-first information architecture, answer-engine (AEO/GEO) structure.
+
+### ⚙️ The mechanisms — a harness that holds the expert honest
+- **Content-first orchestration.** `/cila:go` decides *what to say* before *how it looks* — content hierarchy drives visual hierarchy. It auto-detects new-vs-existing repo, scaffolds or adopts an existing look, and never makes you learn its internals.
+- **A separate critic.** The builder never grades its own work. A `design-reviewer` subagent drives a real browser, **interacts** with the page (scroll, hover, tab, resize, reduced-motion), and grades it against the contract with **cited evidence** — no "looks good".
+- **Gates you can't charm.** Structural checks assert *facts about the rendered DOM* — every color is a real token (computed-style), spacing is on the grid, no layout overflows across a viewport matrix, axe WCAG 2.2 AA is clean, motion respects `prefers-reduced-motion`, Lighthouse budgets hold. **A pretty screenshot never passes a hard fail.**
+- **Best-of-N exploration.** For high-stakes work, cila builds 2–3 *genuinely distinct* directions in parallel git worktrees, keeps only the ones that actually diverged, judges them pairwise (Elo, bias-hardened), and **you pick** from real rendered pixels.
+- **A frozen contract.** Before building, planner and evaluator agree on an append-only `ACCEPTANCE.md` — the deterministic + visual + message criteria for "done". Criteria get ticked, never quietly deleted.
+- **Measurable & self-improving — at build time.** `cila-Bench` scores cila's *own* output with pairwise Elo so quality is trackable, and a `taste` skill learns your preferences **from your edits** (not telemetry). cila never touches your deployed site.
+
+The throughline: **the gates and the contract make taste accountable; the expert knowledge makes the taste good.**
+
+---
+
+## What makes it different
+
+- **All three legs, not just pixels.** A gorgeous shell with "Welcome to our platform" copy still fails. cila does the message, the look, *and* the hardening.
+- **One door, zero jargon.** You collaborate on the *look and the message*; everything technical (framework, scaffolding, gates, tokens) is handled silently.
+- **Distinctive by construction.** It commits to a bold aesthetic and bans the AI-slop signature — the output is meant to look like *a* studio made it, not *the* studio every AI makes.
+- **Honest about scope.** cila is **build-time only**. It does not instrument, monitor, or run experiments on your deployed site. Deployment is yours.
+- **Free & keyless by default.** Everything load-bearing (shadcn, Playwright, axe, Lighthouse, free component registries, self-hosted fonts) costs nothing. Paid extras (custom AI hero-art, premium templates) are opt-in with free fallbacks.
+- **Composition, not reinvention.** Built on the official `frontend-design` skill, shadcn registries, Playwright, axe-core, Lighthouse, and the design-review pattern — cila adds the collaborative direction, the content layer, the token contract, and the glue.
+
+---
+
+## How it works
+
+```
+/cila:go "build me a landing page for X"   (or just say it — cila auto-activates)
+   │
+   ▼
+0 Assess      detect new vs existing repo · framework · intent          (silent)
+1 Direction   MESSAGE first (positioning · copy · voice → CONTENT.md),
+              then LOOK (aesthetic · OKLCH tokens → DESIGN.md);          (collaborate
+              freeze ACCEPTANCE.md. best-of-N here for flagship heroes.   on taste only)
+2 Materialize scaffold/adopt · wire tokens, components, gates            (silent)
+3 Build       real copy (no lorem) + the committed aesthetic + one wow moment
+4 Review&gate separate critic: render-health → structural gates →
+              visual + message critique → a11y. Iterate until PASS.
+5 Hand back   show it; learn from any edits you make.
+```
+
+A `Stop`-gate hook keeps it from declaring "done" while gates are red.
+
+---
+
+## Install
+
+```bash
+# in Claude Code
+/plugin marketplace add zcag/cila
+/plugin install cila@cila-marketplace
+```
+
+Then just ask for a site (`/cila:go` or *"build me…"*). Verify with `/plugin`, `/help`, `/agents`.
+
+---
+
+## What's inside
+
+| | |
+|---|---|
+| **Front door** | `skills/go` → `/cila:go` (also auto-invoked) |
+| **Subagents** | content-strategist · design-director · design-reviewer · design-explorer · a11y-auditor |
+| **Skills** | content-structure · copywriting · voice · design-tokens · frontend-aesthetics · motion · reference-extract · inspiration · icons · wow · r3f · shaders · hero-art · 3d-assets · explore · view-transitions · taste |
+| **Templates** | Astro & Next starters (build-verified) · the wow component library · production gates · DESIGN.md / CONTENT.md / ACCEPTANCE.md contracts |
+| **Bench** | `cila-Bench` — pairwise-Elo design-quality benchmark on cila's own output |
+
+---
 
 ## Docs
 
-- [`docs/RESEARCH.md`](docs/RESEARCH.md) — consolidated findings from six deep-research passes, with sources.
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — the target plugin design (structure, the loop, the mechanisms).
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) — phased build plan (Phase 1 = lean core, 2 = compounding, 3 = scale & wow).
-- [`docs/DECISIONS.md`](docs/DECISIONS.md) — locked decisions and their rationale.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — structure, the build loop, the mechanisms
+- [`docs/RESEARCH.md`](docs/RESEARCH.md) · [`docs/RESEARCH-CONTENT.md`](docs/RESEARCH-CONTENT.md) · [`docs/RESEARCH-FRONTIER.md`](docs/RESEARCH-FRONTIER.md) — the evidence base, with sources
+- [`docs/DECISIONS.md`](docs/DECISIONS.md) — locked decisions + rationale
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — what's built and what's next
+- [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md) — optional paid/keyed extras (all with free fallbacks)
 
-## Approach
+---
 
-`cila` is a **composition layer**, not a from-scratch reimplementation. It depends on / wires in existing open-source pieces (`frontend-design`, OneRedOak design-review, Vercel web-interface-guidelines, shadcn MCP, Playwright MCP, axe-core, …) and adds only the ~20% that's genuinely missing: the collaborative design step, the locked token contract, per-repo materialization, and the glue.
+## Status
+
+Actively built. The core (content + visual + production), best-of-N exploration, the wow tier, the gate stack, and the build-time self-improvement subsystem are in place. cila is a **design partner, not a black box** — it collaborates on the calls only a human should make, and proves the rest.
+
+*Built on the shoulders of the [`frontend-design`](https://claude.com/plugins/frontend-design) skill, [shadcn/ui](https://ui.shadcn.com), [Playwright](https://playwright.dev), [axe-core](https://github.com/dequelabs/axe-core), and the design-review pattern.*

@@ -120,20 +120,20 @@ Researched in `docs/RESEARCH-CONTENT.md` (positioning · conversion copy · voic
 
 ---
 
-## Audit closeout (open)
+## Audit closeout
 
-A two-agent review (prompt architecture + code/templates) was run and triaged; nearly all findings fixed. Remaining:
-- [ ] Starters trip `gate:layout` touch-target: a 22px nav link (<24px, WCAG 2.5.8) + the 1×1 skip-link — bump hit-areas or honor the inline/skip-link exception in the gate.
-- [ ] `stylelint-config-standard` stylistic nits in starters' `globals.css` (import-notation, vendor-prefix, comment spacing).
+A two-agent review (prompt architecture + code/templates) was run, triaged, and fixed. Status:
+- [x] Touch-target: gate honors WCAG 2.5.8 exceptions (inline / focus-enlarge / spacing — browser-verified) + starters bumped nav hit-areas ≥24px.
+- [x] stylelint nits fixed in both starters' global CSS (import-notation, vendor-prefix, comment spacing) — lint clean.
 - [ ] cross-marketplace `frontend-design` dependency resolution (needs the official plugin's release tags) — verify on a real install; it's pre-installed by default so usually moot.
 
 ---
 
-## Frontier directions (researched, not committed) — see `docs/RESEARCH-FRONTIER.md`
+## Frontier directions — see `docs/RESEARCH-FRONTIER.md`
 
-Net-new directions beyond the core + Phase 2. Keystone = **build-time measurement**. **cila is build-time only — no deployed-state / analytics / live-experiment work** (`[scope]` in DECISIONS). Pursue on demand.
+Net-new directions beyond the core. Keystone = **build-time measurement**. **cila is build-time only — no deployed-state / analytics / live-experiment work** (`[scope]` in DECISIONS). **A, B, and D are now BUILT; C remains.**
 
-- **A — Measurable & self-improving (the moat, build-time):** `cila-Bench` (pairwise Elo scoreboard) + cross-family judge + human holdout; GEPA prompt-evolution; CIPHER diff→preference (self-writing taste, from your edits); curated example bank. *(No production/conversion signal — dev-time only.)*
-- **B — Frontier web (cheap, anytime):** View Transitions, scroll-driven CSS default, Speculation Rules, INP gate, popover/dialog/invoker + anchor positioning (a11y + dep removal), `text-wrap: balance/pretty`, WebGPU+TSL, AEO/GEO content. (Skip `llms.txt`.)
-- **C — Build-time scaling (NOT deployed-state):** programmatic/full-site pages + design-system governance; i18n; redesign-audit. *(Analytics instrumentation, live A/B/CRO, RUM, conversion writeback = OUT OF SCOPE.)*
-- **D — Harden the harness:** evidence/rubric-grounded + trajectory judging; verification-first frozen `ACCEPTANCE.md`; durable `.cila/progress.md` (read-before-act); diversity-preserving best-of-N; externally-gated bounded reflexion; skill routing + cost tiers at scale.
+- ✅ **A — Measurable & self-improving (the moat, build-time):** `cila-Bench` (pairwise Elo scoreboard) + cross-family judge + human holdout; GEPA prompt-evolution; CIPHER diff→preference (self-writing taste, from your edits); curated example bank. *(No production/conversion signal — dev-time only.)*
+- ✅ **B — Frontier web (cheap, anytime):** View Transitions, scroll-driven CSS default, Speculation Rules, INP gate, popover/dialog/invoker + anchor positioning (a11y + dep removal), `text-wrap: balance/pretty`, WebGPU+TSL, AEO/GEO content. (Skip `llms.txt`.)
+- ◻ **C — Build-time scaling (NOT deployed-state, remaining):** programmatic/full-site pages + design-system governance; i18n; redesign-audit. *(Analytics instrumentation, live A/B/CRO, RUM, conversion writeback = OUT OF SCOPE.)*
+- ✅ **D — Harden the harness:** evidence/rubric-grounded + trajectory judging; verification-first frozen `ACCEPTANCE.md`; durable `.cila/progress.md` (read-before-act); diversity-preserving best-of-N; externally-gated bounded reflexion; skill routing + cost tiers at scale.
