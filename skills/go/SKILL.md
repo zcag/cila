@@ -32,23 +32,23 @@ Maintain `.cila/state.json` in the project (ensure `.cila/` is gitignored). Shap
 Read `$ARGUMENTS` + the repo: empty vs existing app, framework, Tailwind/tokens, whether `DESIGN.md` exists; infer intent (new site / new page / redesign / review-only). Decide all mechanics yourself. Ask the user only a genuinely ambiguous *plain-language* question (e.g. "marketing site or web app?") — never a technical fork.
 → **Exit:** you know the stack, the intent, and the mode (scaffold vs overlay). Write state `stage:assess`.
 
-## Stage 1 — Direction  (the one real collaboration — taste only)
-- **No `DESIGN.md`, new site or redesign:** delegate to the **design-director** subagent — it anchors on award-tier references (via the Steel MCP) by default, proposes 3–5 distinct directions (one leaning on a wow/signature moment when apt), and decides the look *with* the user.
-- **High-stakes / "show me options" / max-wow:** use the **`explore` skill** (best-of-N) instead of deciding on paper — build 2–3 real candidates in parallel, judge on screenshots, the user picks; then lock the winner's `DESIGN.md`.
-- **No `DESIGN.md`, existing app whose look should stay:** silently capture its current design into `DESIGN.md` via the `reference-extract` skill; show the user the captured look plainly and confirm. **Don't restyle their app.**
-- **`DESIGN.md` exists:** use it; don't re-litigate.
-→ **Exit:** a locked `DESIGN.md` + `tokens.css` exist and the user has agreed to the look. **Do not proceed without this.** State `stage:direction`.
+## Stage 1 — Direction  (the real collaboration: the message, then the look)
+**Content-first** — decide WHAT it says before HOW it looks; the content hierarchy drives the visual hierarchy.
+- **Message (if there's copy to write):** if no `CONTENT.md`, delegate to the **content-strategist** subagent — positioning, the ONE core message, voice, and the page/section plan, decided *with* the user (the "angle" — their call, like the look). It writes `CONTENT.md`.
+- **Look:** then delegate to **design-director** (it reads `CONTENT.md` so the look serves the message) → `DESIGN.md` + `tokens.css`. It anchors on award-tier references (via Steel) and proposes a direction (one wow/signature moment when apt). For high-stakes / "show me options" / max-wow, use the **`explore`** skill (best-of-N: build 2–3 real candidates, judge on screenshots, the user picks). Existing app whose look stays → capture it via `reference-extract`; don't restyle.
+- If `CONTENT.md` / `DESIGN.md` already exist, use them; don't re-litigate.
+→ **Exit:** a locked `CONTENT.md` (message + section plan + voice) and `DESIGN.md` + `tokens.css` exist, and the user has agreed to **both the message and the look**. Do not proceed without these. State `stage:direction`.
 
 ## Stage 2 — Materialize  (silent, never clobber)
 Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (marketing) or set up Next for an app; for an existing app, leave its code alone and only add what's missing. Ensure `tokens.css` matches `DESIGN.md`. **Merge** (never overwrite) `components.json` (`@shadcn @magicui @aceternity @origin @cult @reactbits`) and the `${CLAUDE_PLUGIN_ROOT}/templates/gates/` scripts+deps; point `BASE_URL` at the dev server. Append (don't overwrite) a cila note to `CLAUDE.md`. Report it as a one-line "set up the project", not a wall of steps.
 → **Exit:** tokens, gates, and registries are wired additively. State `stage:materialize`.
 
 ## Stage 3 — Build
-**Set `gate_required:true`.** Build what they asked against `DESIGN.md`, using `design-tokens`, `motion`, and `frontend-aesthetics` (and the `wow` skill + `templates/wow` for standout/jaw-dropping work — one signature moment, always with a reduced-motion fallback). Commit to the locked aesthetic; no AI-slop defaults.
-→ **Exit:** the requested UI is implemented and the dev server renders it. State `stage:build`.
+**Set `gate_required:true`.** Write the **real copy** from `CONTENT.md` using the `copywriting` + `voice` skills (never lorem; run the anti-slop edit pass). Build against `DESIGN.md` using `design-tokens`, `motion`, and `frontend-aesthetics` (and the `wow` skill + `templates/wow` for standout work — one signature moment, reduced-motion-safe). Content-first: the real copy + section priority lead; the visual serves them. Commit to the locked aesthetic + voice; no AI-slop defaults.
+→ **Exit:** the requested UI is implemented with real copy and the dev server renders it. State `stage:build`.
 
 ## Stage 4 — Review & gate  (loop until PASS)
-Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md`. Apply its fixes and iterate. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
+Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md` **and a content/message critique vs `CONTENT.md`** (5-second clarity, "So what?" per section, anti-slop kill-list, scannability, CTA clarity). Apply its fixes and iterate. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
 → **Exit:** reviewer returns **PASS** (no hard failures). Then set `gate_required:false`, `stage:review`→`done`.
 
 ## Stage 5 — Hand back

@@ -75,6 +75,19 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 
 ---
 
+## Content track — Messaging & copy (core: the third leg of web design)
+
+Researched in `docs/RESEARCH-CONTENT.md` (positioning · conversion copy · voice/anti-slop · IA/narrative/SEO).
+
+- [x] `CONTENT.md` contract template (positioning · core message · voice chart · page/section plan · VoC)
+- [x] `content-strategist` subagent — strategy → `CONTENT.md`, collaborates on the "angle"
+- [x] `copywriting` skill — PAS/AIDA/BAB/FAB, page anatomy by type, headline/CTA craft, conversion checklist, Desire−(Labor+Confusion)
+- [x] `voice` skill — Voice Chart, anti-slop kill-list + counters, microcopy, separate editor pass
+- [x] `content-structure` skill — StoryBrand, IA, scannability, content-first handoff, SEO (2026 flags), a11y convergence
+- [x] Content-first wiring: `/cila:go` does message→look; build writes real copy; design-director consumes `CONTENT.md`; design-reviewer critiques copy
+
+---
+
 ## Phase 2 — Compounding (gets better with use)
 
 - [ ] Taste profile (`taste/*.md` in `${CLAUDE_PLUGIN_DATA}`) + SessionStart hook injection

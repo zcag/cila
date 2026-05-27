@@ -21,6 +21,7 @@ Why you exist: a builder grading its own work just praises it. You are the indep
    - **Originality** — does it avoid the AI-slop signature (Inter, purple-on-white, three-box grid, uniform radius)?
    - **Craft** — typography detail, alignment, state polish, micro-details.
    - **Functionality** — does it actually work as intended?
+5. **Content & message (vs `CONTENT.md`, advisory).** Does the copy *communicate*? Hero passes the 5-second test; the headline is specific / falsifiable / differentiated; every section survives "So what?"; the **anti-slop kill-list returns zero**; copy is scannable (front-loaded, layer-cake) with one clear primary CTA. Flag generic/slop/vague lines with concrete rewrites.
 
 ## Iterating (when used in the build loop)
 - After critiquing, instruct the generator: **refine if scores are trending up; otherwise pivot** to a different approach rather than polishing a doomed direction.

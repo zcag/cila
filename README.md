@@ -2,7 +2,7 @@
 
 A portable **design studio for Claude Code** — it makes Claude produce *gorgeous, production-grade* websites instead of generic "AI slop."
 
-`cila` is a self-contained Claude Code **plugin**: install it once and any agent in any repo can use it. It bundles a collaborative aesthetic-direction step, a token-locked design contract, premium (free) component registries, a visual-critique build loop, and machine-checkable production gates.
+`cila` is a self-contained Claude Code **plugin**: install it once and any agent in any repo can use it. It covers all three legs of web design — **content + visual + production**: a content/messaging strategy step (positioning, copy, voice), a collaborative aesthetic-direction step, a token-locked design contract, premium (free) component registries, a visual-critique build loop, and machine-checkable production gates.
 
 > *cila* (Turkish): **polish, gloss** — the craft layer over raw components.
 
