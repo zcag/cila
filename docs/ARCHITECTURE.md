@@ -4,7 +4,7 @@ The target design. See [`ROADMAP.md`](ROADMAP.md) for what's built when.
 
 ## Form factor
 
-`cila` is a **Claude Code plugin** (the only container that bundles commands + subagents + skills + hooks + MCP config in one installable, versioned, shareable unit). Authored as its own git repo (`~/proj/cila`), distributed via a local marketplace synced through `~/dotty`, so every machine on the fleet gets it; installable anywhere via `gh`/URL.
+`cila` is a **Claude Code plugin** (the only container that bundles commands + subagents + skills + hooks + MCP config in one installable, versioned, shareable unit). Authored as its own git repo and distributed via a Claude Code marketplace — added by local path during development, or installed from the GitHub repo on any machine.
 
 ## Two-tier model
 
@@ -45,7 +45,7 @@ your-site/
 
 ## "Point any agent at it" — three paths
 
-1. **Already global** — plugin syncs via dotty; every repo has `/cila:go` (which also auto-fires when the user describes a site to build) + the subagents + MCP config.
+1. **Already global** — once installed, every repo has `/cila:go` (which also auto-fires when the user describes a site to build) + the subagents + MCP config.
 2. **Bootstrap a fresh repo** — `/cila:go` (or just asking for a site) silently detects state, scaffolds or adopts, and writes a pointer into the repo's `CLAUDE.md` so the next agent self-discovers the rig.
 3. **Foreign machine** — `git`/URL install of the marketplace.
 
