@@ -15,6 +15,7 @@ You are cila's single front door. The user never needs to know how cila works �
 3. **Run the stages in order; never skip one.** Each stage below has an **Exit** you must satisfy before advancing.
 4. **Never declare done while a gate is failing.** "Looks fine" never overrides a hard gate.
 5. **Track progress** in `.cila/state.json` so a long or interrupted run resumes cleanly.
+6. **Work in reviewable chunks — checkpoint, don't disappear.** One `/cila:go` must NOT run for ~an hour unattended. Agree a focused scope, then pause for a quick **feedback round** at each checkpoint below (the *vibe*, the *first rendered cut*, and before any expensive pass). Course-correct on minutes of work, never a finished site.
 
 ## State file
 Maintain `.cila/state.json` in the project (ensure `.cila/` is gitignored). Shape:
@@ -48,7 +49,7 @@ Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (mar
 → **Exit:** tokens, gates, and registries are wired additively. State `stage:materialize`.
 
 ## Stage 3 — Build
-**Set `gate_required:true`.** Build against `DESIGN.md` using `design-tokens`, `icons`, `motion`; no AI-slop defaults; the substance leads, the visual serves it.
+**Set `gate_required:true`.** **First cut → checkpoint (anti-marathon):** build *first* a small, representative slice — the **hero + one section** (marketing) or the **app shell + one key screen** (app) — render it, and run a **feedback round** with the user on the vibe / ideas / overall feel. Adjust the direction here, on minutes of work, **before** building the rest. Then build the remaining agreed scope **in chunks** (a few sections/screens at a time, checkpointing between), not one monolithic pass. Build against `DESIGN.md` using `design-tokens`, `icons`, `motion`; no AI-slop defaults; the substance leads, the visual serves it.
 - **Marketing:** write the **real copy** from `CONTENT.md` (`copywriting` + `voice`; anti-slop pass; never lorem) + `frontend-aesthetics`; `wow` skill + `templates/wow` for one standout moment.
 - **Application:** build from `UX.md` with **`app-ux`** (IA / nav / shell / heuristics), **`ux-states`** (design **every view's full state set** — empty / loading / error / partial — plus forms + data display), and **`a11y-patterns`** (WAI-ARIA component contracts; prefer shadcn-on-Radix, flag hand-rolled). UX microcopy via `voice`. **No dead-end states.**
 → **Exit:** the requested UI is implemented (real copy / all states) and the dev server renders it. State `stage:build`.
@@ -61,4 +62,4 @@ On entry write `stage:review`. Delegate to the **design-reviewer** subagent: ren
 Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout. If the user **edits** what you shipped, that's signal — let the `taste` skill capture the preference (diff→one-line rule) for next time. On a gate PASS, `taste` also **promotes the output to the example bank** if it clears the cila-Bench standing gate. If the user says "remember / always / stop / I prefer …" about *how* cila builds, invoke `taste`.
 
 ---
-**Budget:** default `N=3` for `explore` and static-first judging; reserve best-of-N + trajectory judging on *every* candidate for flagship heroes (vision tokens ~3×). Offer draft / standard / flagship depth when cost matters.
+**Budget & pace:** default to a **standard** pass — a focused scope, static-first judging, `N=3` for `explore`. **Don't bundle every expensive pass into one casual command:** best-of-N, 3D/shader wow, trajectory judging, and exhaustive polish are **flagship** depth — reach for them only on an explicit ask or at a checkpoint. A first cut + a feedback round beats an hour-long monolithic build every time.

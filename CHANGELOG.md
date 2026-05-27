@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.2.1 — 2026-05-27
+
+- **Fix (process, from live testing):** `/cila:go` now works in **reviewable chunks with feedback rounds**, not one ~hour-long monolithic build. Added a **first-cut checkpoint** (build the hero + one section / the app shell + one screen, render it, get a vibe/ideas feedback round *before* building the rest), a standing "checkpoint — don't disappear" rule, and a **budget/pace** default: best-of-N, 3D/shader wow, trajectory judging, and exhaustive polish are flagship-depth — opt-in, never auto-bundled into one casual command.
+
 ## 0.2.0 — 2026-05-27
 
 **App-UX layer** — cila now treats application/interface design (dashboards, tools, product UIs) as a first-class discipline, not just marketing sites.
