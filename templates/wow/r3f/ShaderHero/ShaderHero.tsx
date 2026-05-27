@@ -15,7 +15,7 @@
        "never" off-screen and back to "always" on-screen (no wasted GPU).
      • prefers-reduced-motion → frameloop "never" + we render exactly ONE frame
        (a static, fully-composed shader frame). No animation, still gorgeous.
-     • Brand colour is read from the resolved `--brand` token at mount and fed
+     • Brand colour is read from the resolved `--color-brand` token at mount and fed
        in as a uniform — NO hardcoded colour in the shader.
 
    Drop into Astro with client:visible, or Next with dynamic({ ssr:false }).

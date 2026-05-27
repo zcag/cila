@@ -5,7 +5,7 @@ description: Production patterns for 3D web with React Three Fiber + drei — he
 
 # React Three Fiber — production 3D
 
-Reference scenes live in `${CLAUDE_PLUGIN_ROOT}/templates/wow/r3f/` — copy/adapt them rather than writing from scratch. This skill is the rulebook.
+Reference scenes live in `${CLAUDE_PLUGIN_ROOT}/templates/wow/r3f/` — copy/adapt them rather than writing from scratch. This skill is the rulebook. For real models / HDRIs / textures beyond procedural geometry, use the `3d-assets` skill.
 
 ## Setup
 - Deps: `three @react-three/fiber @react-three/drei maath`.

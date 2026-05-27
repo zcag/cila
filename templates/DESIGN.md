@@ -1,6 +1,6 @@
 <!--
   DESIGN.md — the locked design contract for this project.
-  Written/updated by `/cila:design`. cila re-reads this every session, so it is the
+  Written/updated by the design-director (via /cila:go). cila re-reads this every session, so it is the
   source of truth that stops the model drifting back to generic defaults.
   Edit deliberately. Replace every <…> placeholder. Keep it tight.
 -->

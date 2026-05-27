@@ -2,6 +2,7 @@
   "name": "cila-marketplace",
   "description": "cila — a portable design studio for Claude Code that produces gorgeous, production-grade websites.",
   "owner": { "name": "Cagdas" },
+  "allowCrossMarketplaceDependenciesOn": ["claude-plugins-official"],
   "plugins": [
     {
       "name": "cila",

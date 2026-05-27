@@ -44,12 +44,12 @@ Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (mar
 → **Exit:** tokens, gates, and registries are wired additively. State `stage:materialize`.
 
 ## Stage 3 — Build
-**Set `gate_required:true`.** Write the **real copy** from `CONTENT.md` using the `copywriting` + `voice` skills (never lorem; run the anti-slop edit pass). Build against `DESIGN.md` using `design-tokens`, `motion`, and `frontend-aesthetics` (and the `wow` skill + `templates/wow` for standout work — one signature moment, reduced-motion-safe). Content-first: the real copy + section priority lead; the visual serves them. Commit to the locked aesthetic + voice; no AI-slop defaults.
+**Set `gate_required:true`.** Write the **real copy** from `CONTENT.md` using the `copywriting` + `voice` skills (never lorem; run the anti-slop edit pass). Build against `DESIGN.md` using `design-tokens`, `icons`, `motion`, and `frontend-aesthetics` (and the `wow` skill + `templates/wow` for standout work — one signature moment, reduced-motion-safe). Content-first: the real copy + section priority lead; the visual serves them. Commit to the locked aesthetic + voice; no AI-slop defaults.
 → **Exit:** the requested UI is implemented with real copy and the dev server renders it. State `stage:build`.
 
 ## Stage 4 — Review & gate  (loop until PASS)
-Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md` **and a content/message critique vs `CONTENT.md`** (5-second clarity, "So what?" per section, anti-slop kill-list, scannability, CTA clarity). Apply its fixes and iterate. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
-→ **Exit:** reviewer returns **PASS** (no hard failures). Then set `gate_required:false`, `stage:review`→`done`.
+On entry write `stage:review`. Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md` **and a content/message critique vs `CONTENT.md`** (5-second clarity, "So what?" per section, anti-slop kill-list, scannability, CTA clarity). Then delegate to the **a11y-auditor** for the behavioral accessibility checks axe can't cover (keyboard, focus order/restore, reduced-motion, semantics). Apply all fixes and iterate. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
+→ **Exit:** design-reviewer + a11y-auditor return **PASS** (no hard failures). Then set `gate_required:false` and `stage:done`.
 
 ## Stage 5 — Hand back
 Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout.

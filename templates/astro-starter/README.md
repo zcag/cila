@@ -1,7 +1,7 @@
 # cila — Astro starter
 
 A real, minimal-but-complete **Astro + Tailwind v4** marketing/landing starter,
-wired to cila's token system and component registries. `/cila:init` copies this
+wired to cila's token system and component registries. `/cila:go` copies this
 into a new site. It is intentionally **not** default-shadcn: one OKLCH brand hue,
 a CSS-first token contract, a distinctive type pairing, and one guarded motion
 moment.
@@ -10,8 +10,10 @@ moment.
 
 - **Astro** (static output) — ~90% less JS, great Core Web Vitals; deploys to
   Cloudflare Pages.
-- **Tailwind v4** via the `@tailwindcss/vite` plugin — **CSS-first `@theme`,
-  no `tailwind.config.js`**.
+- **Tailwind v4** via the `@tailwindcss/postcss` plugin (`postcss.config.mjs`) —
+  **CSS-first `@theme`, no `tailwind.config.js`**. PostCSS (not
+  `@tailwindcss/vite`) keeps Tailwind decoupled from Astro's bundled Vite, so
+  there's no Vite peer range to pin or break on an Astro upgrade.
 - **OKLCH tokens** derived from a single `--brand-hue` (light + dark).
 - **Self-hosted variable fonts** via Fontsource (no Google CDN):
   - Display: **Bricolage Grotesque** (`@fontsource-variable/bricolage-grotesque`)
@@ -33,10 +35,17 @@ npm run build    # static build → dist/
 npm run preview  # preview the production build
 ```
 
-> Build note: `vite` is pinned to `^7` in devDependencies on purpose. The current
-> `@tailwindcss/vite` otherwise pulls Vite 8 (rolldown), which mismatches Astro's
-> Vite 7 and breaks the Tailwind build (`Missing field tsconfigPaths`). One shared
-> Vite 7 fixes it. Drop the pin once Astro moves to Vite 8.
+> Build & version notes:
+> - Tailwind is wired through **`@tailwindcss/postcss`** (in `postcss.config.mjs`),
+>   not `@tailwindcss/vite`. The Vite plugin has a strict Vite peer range that
+>   couples it to whatever Vite Astro bundles and breaks on an Astro/Vite bump
+>   (e.g. a rolldown Vite). The PostCSS plugin has **no Vite dependency**, so
+>   there is no `vite` pin in this project and nothing to break on upgrade —
+>   Astro brings its own Vite (currently 7.x).
+> - Pinned: `astro ^6.3.8`, `@tailwindcss/postcss ^4.3.0`, `tailwindcss ^4.3.0`,
+>   `@fontsource-variable/bricolage-grotesque ^5.2.10`,
+>   `@fontsource-variable/hanken-grotesk ^5.2.8`. Clean-room verified with
+>   Astro 6.3.8 + Tailwind 4.3.0 (Astro resolves Vite 7.3.3).
 
 ## Where the brand lives
 

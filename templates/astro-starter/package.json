@@ -14,10 +14,9 @@
     "astro": "^6.3.8"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
     "tailwindcss": "^4.3.0",
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
-    "@fontsource-variable/hanken-grotesk": "^5.2.8",
-    "vite": "^7"
+    "@fontsource-variable/hanken-grotesk": "^5.2.8"
   }
 }

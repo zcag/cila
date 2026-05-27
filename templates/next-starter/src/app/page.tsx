@@ -97,7 +97,7 @@ export default function Page() {
                 A real, minimal-but-complete App Router starter wired to one OKLCH
                 brand hue, a CSS-first token system, and self-hosted variable type.
                 Edit{" "}
-                <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-fg">
+                <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-fg">
                   tokens.css
                 </code>
                 , re-skin everything.

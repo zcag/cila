@@ -11,9 +11,10 @@ cila's default stack is **100% free and keyless**. The items below are **opt-in*
 | **Figma Dev Mode MCP** + Code-to-Canvas | Use a Figma file as the design source / push UI back to canvas | **Paid** Figma seat + the desktop app running | `claude mcp add --transport sse figma-dev-mode-mcp-server http://127.0.0.1:3845/sse` |
 | **v0 Platform API** (`explore`) | An architecturally-different generator for best-of-N | **Paid** (Premium/Team) + usage | OpenAI-compatible `api.v0.dev/v1`; optional explorer backend |
 | **Chrome DevTools MCP** | Interaction-driven CWV/INP traces beyond the Lighthouse-CI gate | **Free** (keyless) | `claude mcp add chrome-devtools -s user -- npx chrome-devtools-mcp@latest` (opt-in perf profiling; Lighthouse CI is the enforced gate) |
+| **Browser MCP for inspiration** — self-hosted **Steel** or `@playwright/mcp` | Screenshot live award-tier galleries to anchor design (`skills/inspiration`) | **Free** (self-hosted Steel, or the Playwright MCP) | The agent **detects when it's missing and asks you to wire one** — cila ships **no private endpoints**. Without it, work from a provided reference. |
 | **Component Pro tiers** — Aceternity Pro / Magic UI Pro | Prebuilt page *templates* | **Paid** ~$199 one-time each | Not required — the free components are what produce the look |
 | **Chromatic** | Hosted visual-regression review UI | **Free tier** → paid by snapshot volume | Optional — cila's Playwright VRT is free + local |
 
 **Recurring baseline (not an integration):** your **Claude plan quota**. The build/review/explore loops consume tokens — the visual loop ~3× (vision/screenshots), best-of-N ~N× build. This is the one real ongoing cost; everything in the default stack is otherwise free.
 
-**Bundled & free** (in `.mcp.json`, no key): shadcn MCP, Playwright MCP. **Free, keyless, used directly:** Iconify API (icons), Poly Haven (3D/CC0), the Steel browser you already self-host (inspiration), Fontsource/Fontshare (fonts).
+**Bundled & free** (in `.mcp.json`, no key): shadcn MCP, Playwright MCP. **Free, keyless, used directly:** Iconify API (icons), Poly Haven (3D/CC0), Fontsource/Fontshare (fonts).

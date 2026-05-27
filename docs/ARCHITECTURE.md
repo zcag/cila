@@ -16,20 +16,20 @@ cila/
 │   ├── plugin.json          # manifest (+ dependencies: frontend-design)
 │   └── marketplace.json     # local marketplace entry → installable
 ├── skills/
-│   ├── go/                   # THE front door: /cila:go (also auto-invoked). Orchestrates everything; auto-detects state, collaborates only on the look
-│   ├── design-tokens/        # OKLCH token system authoring (Tailwind v4 @theme, one --brand-hue)
-│   ├── reference-extract/    # decompose a reference (or an existing app's look) into tokens
-│   ├── motion/               # Motion (motion/react) snippets + reduced-motion guardrails
-│   └── frontend-aesthetics/  # aesthetic families + AI-slop fingerprint counters
+│   ├── go/                   # THE front door: /cila:go (also auto-invoked). Orchestrates everything
+│   ├── content:              # content-structure · copywriting · voice
+│   ├── design:               # design-tokens · frontend-aesthetics · motion · reference-extract · inspiration · icons
+│   └── wow:                  # wow · r3f · shaders · hero-art · 3d-assets · explore
 ├── agents/                   # internal machinery the orchestrator delegates to (the user never calls these directly)
-│   ├── design-director.md    # proposes distinct directions, decides the look WITH the user
-│   ├── design-reviewer.md    # evaluator: Playwright screenshots + gates + critique (never self-grades)
-│   └── a11y-auditor.md        # WCAG 2.2 AA gate
+│   ├── content-strategist.md # the message/positioning — "what to say"
+│   ├── design-director.md    # the aesthetic direction — "how it looks" (reads CONTENT.md)
+│   ├── design-explorer.md    # builds ONE best-of-N candidate (used by the explore skill)
+│   ├── design-reviewer.md    # evaluator: screenshots + gates + critique (visual + copy); never self-grades
+│   └── a11y-auditor.md        # WCAG 2.2 AA behavioral checks
 ├── hooks/
-│   └── hooks.json            # SessionStart (load taste profile) ; Stop/SubagentStop (production gate)
-├── .mcp.json                 # shadcn(+registries), playwright ; chrome-devtools/figma lazy
-├── templates/                # DESIGN.md · tokens.css · CLAUDE-fragment · gates/ · astro-starter/ · next-starter/
-└── bin/cila-run              # headless `claude -p` loop for unattended/CI runs
+│   └── hooks.json            # SessionStart (announce DESIGN.md contract) ; Stop/SubagentStop (gate reminder)
+├── .mcp.json                 # shadcn, playwright (free, keyless) ; paid/keyed integrations opt-in (see INTEGRATIONS.md)
+└── templates/                # CONTENT.md · DESIGN.md · gates/ · wow/ · astro-starter/ · next-starter/
 ```
 
 **Tier 2 — per-repo (materialized silently by `/cila:go`).** Some things must live in the target repo:
@@ -101,4 +101,4 @@ Depend on / wire in, with attribution:
 
 ## Cost posture
 
-100% free stack by default. The only recurring cost is Claude plan quota; the visual loop is heavier (vision tokens ~3x). Mitigations: cap screenshots/cycle, `/cila:review` on demand (not every edit), N=3 for best-of-N, reserve multi-judge panels for tie-breaks. Pro component tiers (Aceternity/Magic UI Pro ~$199) and Chromatic/Figma remain optional, never required.
+100% free stack by default. The only recurring cost is Claude plan quota; the visual loop is heavier (vision tokens ~3x). Mitigations: cap screenshots/cycle, review on demand (not every edit), N=3 for best-of-N, reserve multi-judge panels for tie-breaks. Pro component tiers (Aceternity/Magic UI Pro ~$199) and Chromatic/Figma remain optional, never required.

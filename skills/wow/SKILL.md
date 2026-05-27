@@ -1,6 +1,6 @@
 ---
 name: wow
-description: The playbook for jaw-dropping, award-tier web experiences — when and how to deploy 3D, shaders, generative backgrounds, custom hero art, and orchestrated motion without breaking accessibility or performance. Use whenever the user wants something standout, immersive, "wow", premium, cinematic, or memorable (not a plain page).
+description: The playbook for jaw-dropping, award-tier hero moments — when and how to deploy 3D, shaders, generative backgrounds, custom hero art, and orchestrated motion without breaking accessibility or performance. Use when a build needs a signature 3D / shader / generative-background / big-motion moment — not for ordinary motion or layout polish.
 ---
 
 # Wow — the jaw-dropping playbook

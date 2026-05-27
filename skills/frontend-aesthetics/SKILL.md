@@ -37,4 +37,4 @@ If output drifts generic, check for and fix these:
 | Container soup (>2 nesting levels) | Flatten; structure with grid, not nested wrappers |
 
 ## How to use
-At `/cila:design` time, the design-director proposes directions drawn from these families and locks the choice into `DESIGN.md`. During build, if something reads generic, run this list as a checklist and fix at the token/structure level — not with surface tweaks.
+At direction time, the design-director proposes directions drawn from these families and locks the choice into `DESIGN.md`. During build, if something reads generic, run this list as a checklist and fix at the token/structure level — not with surface tweaks.
