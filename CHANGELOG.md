@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.2.3 — 2026-05-27
+
+- **Improve-existing mode (the right default for built sites):** pointing updated cila at an existing build no longer means *full redesign* (wasteful) or *blindly reuse the old contract* (preserves the timid result). `/cila:go` now detects "improve / upgrade / make it better / bring it up to standard" intent and runs an **audit-and-close-gaps** path: `design-reviewer` gains an **audit mode** that measures the shipped site against cila's *current* standards (gates + Impact/wow + craft/content/app-UX) **and** diffs the existing `DESIGN.md`/`CONTENT.md`/`UX.md` against today's bar, emitting a **prioritized gap report** (contract-gap vs output-gap, with evidence + fix + severity, and what to preserve). The user picks what to fix; cila updates only the below-bar parts and closes gaps incrementally — full re-direction only on an explicit ask or a fundamentally wrong foundation.
+
 ## 0.2.2 — 2026-05-27
 
 - **Fix (wow-by-default):** cila had the wow stack since 0.1.x but *under-applied* it — the default was timid editorial (confirmed on a live build). Striking is now the **floor**: design-director defaults to a bold direction with **at least one signature moment** (more if earned) and, for hero-led marketing, **shows the product**, not just tells; the `wow` skill engages **by default** for hero builds (opt out for deliberately minimal); design-reviewer gains an **Impact/wow axis** that fails the timid modes (no signature moment, no hero visual, washed-out contrast, same-weight repetitive sections — "clean but forgettable" no longer passes).
