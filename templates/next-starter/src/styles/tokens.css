@@ -121,6 +121,11 @@
   --color-surface-raised: oklch(1 0 0);
   --color-overlay: oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.55);
 
+  /* a hover/selected wash for rows, menu items, ghost buttons — the neutral
+     "accent" surface in shadcn terms, tinted with the brand hue (not grey). */
+  --color-muted: oklch(0.955 0.008 var(--brand-hue));
+  --color-muted-hover: oklch(0.93 0.012 var(--brand-hue));
+
   /* text */
   --color-fg: oklch(0.22 0.02 var(--brand-hue));
   --color-fg-muted: oklch(0.5 0.018 var(--brand-hue));
@@ -159,6 +164,9 @@
   --color-surface: oklch(0.2 0.014 var(--brand-hue));
   --color-surface-raised: oklch(0.24 0.016 var(--brand-hue));
   --color-overlay: oklch(0.1 0.01 var(--brand-hue) / 0.65);
+
+  --color-muted: oklch(0.26 0.016 var(--brand-hue));
+  --color-muted-hover: oklch(0.3 0.018 var(--brand-hue));
 
   --color-fg: oklch(0.95 0.012 var(--brand-hue));
   --color-fg-muted: oklch(0.72 0.016 var(--brand-hue));

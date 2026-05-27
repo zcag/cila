@@ -12,19 +12,20 @@
 import type { Metadata, Viewport } from "next";
 import "../styles/tokens.css"; // tokens FIRST (source of truth)
 import "../styles/globals.css"; // then fonts + resets
+import { AppShell } from "@/components/shell/app-shell";
 
 export const metadata: Metadata = {
   title: {
-    default: "cila — app starter",
-    template: "%s · cila",
+    default: "Atlas — cila app shell",
+    template: "%s · Atlas",
   },
   description:
-    "A cila-generated app/dashboard. Edit DESIGN.md + src/styles/tokens.css.",
+    "A cila-generated application shell: sidebar + header + ⌘K palette + a data table and an accessible form. Edit DESIGN.md + src/styles/tokens.css.",
   openGraph: {
     type: "website",
-    title: "cila — app starter",
+    title: "Atlas — cila app shell",
     description:
-      "A cila-generated app/dashboard. Edit DESIGN.md + src/styles/tokens.css.",
+      "A cila-generated application shell. Edit DESIGN.md + src/styles/tokens.css.",
   },
 };
 
@@ -79,7 +80,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: speculationRules }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }

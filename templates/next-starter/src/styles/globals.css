@@ -139,6 +139,81 @@
   }
 }
 
+/* ── Overlay enter/exit (Radix data-state driven) ────────────────────────────
+   Dialog / dropdown / popover / command-palette mount + unmount animations,
+   expressed as small token-free transform+opacity keyframes (compositor-only).
+   These are the `animate-in` / `fade-*` / `zoom-*` / `slide-*` utility classes
+   the shadcn-on-Radix components reference — provided here as plain CSS so the
+   starter needs NO `tailwindcss-animate` plugin. All of them are killed by the
+   prefers-reduced-motion guard below, so motion-sensitive users get instant
+   cuts. Radix toggles `data-state="open|closed"`, which the components map to
+   `.animate-in` / `.animate-out`. */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-in {
+    animation-name: enter;
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+  }
+  .animate-out {
+    animation-name: exit;
+    animation-duration: 120ms;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
+  }
+  .fade-in-0 {
+    --enter-opacity: 0;
+  }
+  .fade-out-0 {
+    --exit-opacity: 0;
+  }
+  .zoom-in-95 {
+    --enter-scale: 0.95;
+  }
+  .zoom-out-95 {
+    --exit-scale: 0.95;
+  }
+  .slide-in-from-top-2 {
+    --enter-translate-y: -0.5rem;
+  }
+  .slide-in-from-bottom-2 {
+    --enter-translate-y: 0.5rem;
+  }
+  .slide-in-from-left-2 {
+    --enter-translate-x: -0.5rem;
+  }
+  .slide-in-from-right-2 {
+    --enter-translate-x: 0.5rem;
+  }
+  .slide-out-to-left {
+    --exit-translate-x: -100%;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: var(--enter-opacity, 1);
+    transform: translate3d(
+        var(--enter-translate-x, 0),
+        var(--enter-translate-y, 0),
+        0
+      )
+      scale(var(--enter-scale, 1));
+  }
+}
+
+@keyframes exit {
+  to {
+    opacity: var(--exit-opacity, 1);
+    transform: translate3d(
+        var(--exit-translate-x, 0),
+        var(--exit-translate-y, 0),
+        0
+      )
+      scale(var(--exit-scale, 1));
+  }
+}
+
 /* ── prefers-reduced-motion: hard baseline. Any motion in components must be
    guarded; this is the global safety net so nothing animates if asked not to.
    Also neutralizes the View Transition snapshots so cross-document navigation
