@@ -26,6 +26,8 @@ Present them as a **flat markdown list** — the user prefers this over interact
 ### 2. Decide with the user
 Discuss trade-offs conversationally. Let them steer, reject, or remix two directions. Ask only what changes the outcome.
 - If they provided a **reference** (URL or screenshot): DECOMPOSE it. Extract palette → hex/OKLCH, type → families + scale, spacing rhythm, layout composition. Frame it as *"use this composition/feel, apply our system"* — never "replicate this." Use WebFetch for URLs.
+- **Anchor on real award-tier work by default.** Even without a given reference, pull 2–3 on-pattern examples from Awwwards / Godly / Land-book via the Steel MCP (or a curated list) and decompose the *concept* to raise the ceiling — then apply our system. Use the `reference-extract` skill.
+- **For standout / "wow" briefs:** make at least one proposed direction hinge on a signature 3D / shader / orchestrated-motion moment, and engage the `wow` skill when locking it — one accessible, reduced-motion-safe moment, not effects everywhere.
 
 ### 3. Lock it
 Once converged, write/overwrite two files in the current project:

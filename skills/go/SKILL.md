@@ -38,10 +38,10 @@ Set the project up so the work and the gates have what they need — additively,
 Do this quietly; report it as a short "set up the project" line, not a wall of steps.
 
 ## 4. Build
-Build what they asked, against `DESIGN.md`. Use the `design-tokens`, `motion`, and `frontend-aesthetics` skills and real components from the registries. Commit to the locked aesthetic; no AI-slop defaults.
+Build what they asked, against `DESIGN.md`. Use the `design-tokens`, `motion`, and `frontend-aesthetics` skills and real components from the registries. Commit to the locked aesthetic; no AI-slop defaults. **If they want something standout/jaw-dropping (or the direction calls for it), engage the `wow` skill** — deploy ONE signature moment (CSS mesh/grain, shader, 3D, or orchestrated motion) from `${CLAUDE_PLUGIN_ROOT}/templates/wow`, always with a reduced-motion fallback. Reach for the lightest tier that achieves the concept.
 
 ## 5. Review & gate (quietly)
-Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique against `DESIGN.md`. Apply its fixes and iterate until it passes. Surface only what matters in plain terms ("mobile layout was overflowing — fixed", not gate names). A hard gate failure is never overridden by "looks fine."
+Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique against `DESIGN.md`. Apply its fixes and iterate until it passes. Surface only what matters in plain terms ("mobile layout was overflowing — fixed", not gate names). A hard gate failure is never overridden by "looks fine." For a heavy-visual hero, use the **showcase performance profile** (`gate:lh:showcase`) — but accessibility, reduced-motion, layout, and token gates stay strict.
 
 ## 6. Hand back
 Show the result (a screenshot/preview) in plain language, and offer the natural next step ("want me to add an about page?" / "tweak the hero?"). Keep cila's machinery invisible throughout.

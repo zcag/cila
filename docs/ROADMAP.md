@@ -60,6 +60,21 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 
 ---
 
+## Phase 1.5 — Creativity & wow (prioritized)
+
+Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority.
+
+- [x] `skills/wow` — the jaw-dropping playbook (concept-first, the menu, tiers, guardrails)
+- [x] `skills/r3f` — React Three Fiber production patterns (perf, damping, reduced-motion)
+- [x] `skills/shaders` — GLSL background recipes (gradient/fbm/domain-warp/grain)
+- [x] Showcase gate profile (`lighthouserc.showcase.json`) + `reduced-motion.spec.ts` hard gate — flex perf for heavy heroes, keep a11y/reduced-motion/layout/tokens strict
+- [~] `templates/wow/` — build-verified reference components (Tier 1 CSS mesh/grain/scroll · Tier 2 R3F shader+3D · orchestrated motion)
+- [x] design-director anchors on award-tier references by default + proposes a wow direction; [ ] Steel-driven retrieval wired end-to-end
+- [ ] Optional AI hero-art via image-gen MCP (Nano Banana / fal) — needs an API key
+- [ ] Light "explore-then-pick": render top-2 hero concepts before committing
+
+---
+
 ## Phase 2 — Compounding (gets better with use)
 
 - [ ] Taste profile (`taste/*.md` in `${CLAUDE_PLUGIN_DATA}`) + SessionStart hook injection
@@ -77,8 +92,8 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 - [ ] Multi-judge debate (tie-break only); DPP/max-min diverse-subset selection
 - [ ] Chrome DevTools MCP — CWV (LCP/CLS/INP) as a hard gate
 - [ ] `bin/cila-run` headless loop; PR design-review GitHub Action (`claude-code-action@v1`)
-- [ ] Mobbin MCP + Steel-driven inspiration retrieval; WebSight/Vision2UI offline datasets
-- [ ] `skills/r3f` + `skills/shaders` (R3F/drei, generative backgrounds); AI image gen MCP (Nano Banana); poly.pizza/Poly Haven assets
+- [ ] Mobbin MCP + WebSight/Vision2UI offline datasets *(Steel-driven inspiration retrieval moved to Phase 1.5)*
+- [ ] Heavier wow at scale: 3D model/asset pipelines (poly.pizza / Poly Haven), AI image-gen MCP in the loop, full best-of-N hero exploration *(`skills/r3f`/`skills/shaders` + base components landed in Phase 1.5)*
 - [ ] Figma Dev Mode MCP + Code to Canvas (optional design source/roundtrip)
 - [ ] Optional v0 Platform API as an architecturally-different generator
 
