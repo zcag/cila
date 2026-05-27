@@ -6,7 +6,8 @@
   "scripts": {
     "gate:tokens": "playwright test token-conformance spacing-scale && stylelint \"src/**/*.css\"",
     "gate:layout": "playwright test layout-invariants",
-    "gate:a11y": "playwright test a11y overlay-a11y",
+    "gate:a11y": "playwright test a11y overlay-a11y pattern-a11y",
+    "gate:patterns": "playwright test pattern-a11y",
     "gate:schema": "playwright test schema",
     "gate:inp": "playwright test responsiveness",
     "gate:visual": "playwright test visual-regression",

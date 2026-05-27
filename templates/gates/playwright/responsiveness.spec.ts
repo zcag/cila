@@ -23,6 +23,15 @@
  *      large inline `<script>` blocks (a hand for "split work / yield to main
  *      thread with scheduler.yield / setTimeout / isInputPending"). This is a
  *      nudge, not proof; real long-task detection lives in the TBT lab metric.
+ *   5. App-UX INP heuristics:
+ *      (a) un-debounced high-frequency inline handlers — `oninput`/`onscroll`/
+ *          `onmousemove`/`onpointermove`/`onresize`/`onwheel`/`ontouchmove`/
+ *          `ondrag` fire many times per interaction; running work inline (vs a
+ *          debounced/throttled listener) inflates INP and causes jank.
+ *      (b) unvirtualized long lists — a list/table/grid with > ~200 row-like
+ *          children in the DOM (override via CILA_LONG_LIST). Virtualize +
+ *          paginate/stream; content-visibility on the container/rows counts as
+ *          a mitigation.
  *
  * WHY WARN: every item here is a heuristic that has legitimate exceptions
  * (a `transition: all` on a tiny element is harmless; a short page needs no
@@ -42,6 +51,13 @@ const LONG_PAGE_VIEWPORTS = 3;
 /** Inline <script> larger than this (chars) earns a "split/yield work" nudge. */
 const BIG_INLINE_SCRIPT = 15_000;
 
+/**
+ * A list/table/grid with more row-like children than this is "long" → expects
+ * virtualization (or content-visibility as a mitigation). ~200 rows is where
+ * unvirtualized layout/paint starts to bite interaction latency.
+ */
+const LONG_LIST_ROWS = Number(process.env.CILA_LONG_LIST ?? 200);
+
 const vp = VIEWPORTS[VIEWPORTS.length - 1]; // desktop — responsiveness is JS/CSS-bound, not layout-bound
 
 for (const route of ROUTES) {
@@ -53,7 +69,7 @@ for (const route of ROUTES) {
       await settle(page);
 
       const findings = await page.evaluate(
-        ({ safeList, longPageVp, bigScript }) => {
+        ({ safeList, longPageVp, bigScript, longList }) => {
           const safe = new Set(safeList);
           const out: string[] = [];
           const describe = (el: Element) => {
@@ -134,12 +150,68 @@ for (const route of ROUTES) {
               );
           }
 
+          // (5a): un-debounced high-frequency inline handlers. `oninput`,
+          // `onscroll`, `onmousemove`, `onpointermove`, `onresize`, `onwheel`,
+          // `ontouchmove` fire many times per interaction; running work inline
+          // (vs a debounced/throttled addEventListener) is a classic INP/jank
+          // smell. We can only see *inline* handlers in the DOM; their mere
+          // presence on a high-frequency event is the warn (we can't measure the
+          // work, so this is a nudge — matches the inline-handler stance above).
+          const HIGH_FREQ = /^on(input|scroll|mousemove|pointermove|resize|wheel|touchmove|drag)$/i;
+          const hot: string[] = [];
+          for (const el of Array.from(document.querySelectorAll('*'))) {
+            for (const a of Array.from(el.attributes)) {
+              if (HIGH_FREQ.test(a.name)) hot.push(`${describe(el)} ${a.name}`);
+            }
+          }
+          for (const h of [...new Set(hot)])
+            out.push(
+              `high-frequency inline handler (${h}) — these fire rapidly; debounce/` +
+                `throttle the work (or use addEventListener + scheduler.yield) so it ` +
+                `doesn't block paint and inflate INP`
+            );
+
+          // (5b): unvirtualized long lists. A list/table/grid with a very large
+          // number of *row-like* DOM children is expensive to lay out, paint and
+          // keep interactive. Past ~200 rows, virtualize (TanStack Virtual) +
+          // server-side paging. Heuristic: count direct row children, and treat a
+          // container declaring content-visibility on its children as mitigated.
+          const ROW_OK = longList; // threshold passed in below
+          const rowContainers: { node: Element; rows: number }[] = [];
+          for (const list of Array.from(
+            document.querySelectorAll('ul, ol, tbody, [role=listbox], [role=grid], [role=tree], [role=list]')
+          )) {
+            const tag = list.tagName.toLowerCase();
+            const rowSel =
+              tag === 'tbody'
+                ? 'tr'
+                : list.getAttribute('role') === 'grid'
+                  ? '[role=row]'
+                  : '[role=option], [role=treeitem], [role=listitem], li';
+            const rows = list.querySelectorAll(rowSel).length;
+            if (rows > ROW_OK) rowContainers.push({ node: list, rows });
+          }
+          for (const { node, rows } of rowContainers) {
+            // Mitigated if the container or a row uses content-visibility (a poor
+            // man's virtualization for paint), which we treat as intentional.
+            const cvOnSelf = getComputedStyle(node).contentVisibility;
+            const firstRow = node.firstElementChild;
+            const cvOnRow = firstRow ? getComputedStyle(firstRow).contentVisibility : 'visible';
+            if (cvOnSelf === 'auto' || cvOnSelf === 'hidden' || cvOnRow === 'auto') continue;
+            out.push(
+              `unvirtualized long list ${describe(node)} (${rows} rows in the DOM) — ` +
+                `virtualize (e.g. TanStack Virtual) + paginate/stream so the main ` +
+                `thread isn't laying out hundreds of rows (hurts INP & memory)`
+            );
+          }
+
           return [...new Set(out)];
         },
         {
           safeList: [...COMPOSITOR_SAFE],
           longPageVp: LONG_PAGE_VIEWPORTS,
           bigScript: BIG_INLINE_SCRIPT,
+          longList: LONG_LIST_ROWS,
         }
       );
 

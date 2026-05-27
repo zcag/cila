@@ -15,6 +15,12 @@
  *       - it declares no `aria-modal` / no documented trap hook
  *         (`[data-focus-trap]`) — i.e. nothing indicates focus is contained.
  *     → warn: "div role=dialog without focus-trap".
+ *   • An open modal with no accessible name (no `aria-label`, no
+ *     `aria-labelledby` resolving to non-empty text) → warn (APG dialog
+ *     pattern requires the dialog be named).
+ *   • An open hand-rolled modal whose focus is NOT actually trapped: we drive
+ *     real `Tab` presses (behavior, not just evidence) and warn if focus leaks
+ *     out of the modal instead of cycling within it.
  *   • A `<dialog>` opened with `.show()` (non-modal) when `aria-modal`/modal
  *     semantics look intended → informational warn (use `showModal()`).
  *   • A menu (`[role=menu]`) open with no `[role=menuitem]` children, or whose
@@ -138,6 +144,27 @@ for (const route of ROUTES) {
             );
           if (!hasFocusable)
             out.push(`${describe(el)} has no focusable child to receive initial focus`);
+
+          // Accessible name: a modal must announce what it is. Check the APG
+          // labelling paths — aria-label, aria-labelledby pointing at present
+          // text, or a [popover]-style heading is out of scope; APG wants an
+          // explicit name on the dialog node.
+          const labelledBy = el.getAttribute('aria-labelledby');
+          const labelledByOk =
+            !!labelledBy &&
+            labelledBy
+              .split(/\s+/)
+              .filter(Boolean)
+              .some((id) => {
+                const t = document.getElementById(id);
+                return !!t && (t.textContent || '').trim().length > 0;
+              });
+          const hasLabel = (el.getAttribute('aria-label') || '').trim().length > 0;
+          if (!hasLabel && !labelledByOk)
+            out.push(
+              `${describe(el)} open without an accessible name — add aria-label ` +
+                `or aria-labelledby pointing at its title (APG dialog pattern)`
+            );
         }
 
         // ── Menus ────────────────────────────────────────────────────────────
@@ -159,7 +186,89 @@ for (const route of ROUTES) {
         return [...new Set(out)];
       });
 
-      warn(testInfo, `Overlay a11y on ${route}`, findings);
+      // ── Focus-trap behavior (best-effort, Playwright-driven) ────────────────
+      // The in-page pass above checks *evidence* of focus management (aria-modal,
+      // [data-focus-trap], focus currently inside). This pass checks the actual
+      // BEHAVIOR: for each open modal that has ≥2 focusable children, tab through
+      // (length+1) times and confirm focus never escapes the modal — i.e. Tab
+      // wraps/cycles inside rather than leaking to the page behind. We need the
+      // real keyboard here (Tab can't be synthesized inside page.evaluate), so it
+      // lives in the test context. Tag candidates in-page first for stable refs.
+      const trapCandidates = await page.evaluate(() => {
+        const isVisible = (el: Element) => {
+          const s = getComputedStyle(el);
+          const r = el.getBoundingClientRect();
+          return (
+            s.display !== 'none' &&
+            s.visibility !== 'hidden' &&
+            s.opacity !== '0' &&
+            r.width > 0 &&
+            r.height > 0
+          );
+        };
+        const FOCUSABLE =
+          'a[href], button:not([disabled]), input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), [contenteditable=""], [contenteditable=true]';
+        const cands: { key: string; label: string; count: number }[] = [];
+        const modals = Array.from(
+          document.querySelectorAll('[role=dialog], [role=alertdialog]')
+        ).filter((el) => el.tagName.toLowerCase() !== 'dialog' && isVisible(el));
+        modals.forEach((el, i) => {
+          const focusables = Array.from(el.querySelectorAll(FOCUSABLE)).filter((f) =>
+            isVisible(f)
+          );
+          if (focusables.length < 2) return; // nothing meaningful to cycle
+          const key = `cila-trap-${i}`;
+          el.setAttribute('data-cila-trap-check', key);
+          const role = el.getAttribute('role') || 'dialog';
+          const id = (el as HTMLElement).id ? `#${(el as HTMLElement).id}` : '';
+          cands.push({
+            key,
+            label: `${el.tagName.toLowerCase()}${id}[role=${role}]`,
+            count: focusables.length,
+          });
+        });
+        return cands;
+      });
+
+      const trapFindings: string[] = [];
+      for (const cand of trapCandidates) {
+        const modal = page.locator(`[data-cila-trap-check="${cand.key}"]`);
+        // Seed focus into the modal, then Tab through one full cycle + 1.
+        await page.evaluate((key) => {
+          const el = document.querySelector(`[data-cila-trap-check="${key}"]`);
+          const first = el?.querySelector<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), [contenteditable=""], [contenteditable=true]'
+          );
+          first?.focus();
+        }, cand.key);
+
+        let escaped = false;
+        for (let i = 0; i < cand.count + 1; i++) {
+          await page.keyboard.press('Tab');
+          const inside = await modal.evaluate(
+            (el) => el.contains(document.activeElement) && document.activeElement !== document.body
+          );
+          if (!inside) {
+            escaped = true;
+            break;
+          }
+        }
+        if (escaped)
+          trapFindings.push(
+            `${cand.label} does not trap focus — Tab moved focus outside the open ` +
+              `modal (focus should cycle within; prefer <dialog>/showModal() or a ` +
+              `verified trap marked [data-focus-trap])`
+          );
+      }
+
+      // Clean up the temporary markers so they never leak into other checks.
+      await page.evaluate(() => {
+        document
+          .querySelectorAll('[data-cila-trap-check]')
+          .forEach((el) => el.removeAttribute('data-cila-trap-check'));
+      });
+
+      warn(testInfo, `Overlay a11y on ${route}`, [...findings, ...trapFindings]);
       // Best-effort advisory: passes structurally. Hard a11y facts (roles,
       // contrast, names) are covered by the axe gate.
       expect(Array.isArray(findings)).toBe(true);
