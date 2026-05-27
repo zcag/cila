@@ -70,7 +70,7 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 - [x] Showcase gate profile (`lighthouserc.showcase.json`) + `reduced-motion.spec.ts` hard gate — flex perf for heavy heroes, keep a11y/reduced-motion/layout/tokens strict
 - [x] `templates/wow/` — build-verified reference components (Tier 1 CSS mesh/grain/scroll · Tier 2 R3F shader+3D · orchestrated motion); all honor reduced-motion + compositor-only + brand tokens
 - [x] design-director anchors on award-tier references by default + proposes a wow direction; [ ] Steel-driven retrieval wired end-to-end
-- [ ] Optional AI hero-art via image-gen MCP (Nano Banana / fal) — needs an API key
+- [x] AI hero-art (`skills/hero-art`) — opt-in image-gen MCP wiring (Nano Banana / fal / Replicate) + `sharp` responsive pipeline + LCP/a11y rules; user supplies the key (keyless fallback = shaders/CSS/3D + Pexels)
 - [ ] Light "explore-then-pick": render top-2 hero concepts before committing
 
 ---
@@ -88,12 +88,12 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 
 ## Phase 3 — Scale & wow (opt-in)
 
-- [ ] Best-of-N: parallel git-worktree explorer subagents → pairwise Elo tournament → human picks
-- [ ] Multi-judge debate (tie-break only); DPP/max-min diverse-subset selection
+- [x] Best-of-N: parallel git-worktree explorer subagents → pairwise Elo tournament → human picks (`explore` skill + `design-explorer` subagent + design-reviewer pairwise mode)
+- [~] DPP/max-min diverse-subset selection (in `explore`); multi-judge debate tie-break still pending
 - [ ] Chrome DevTools MCP — CWV (LCP/CLS/INP) as a hard gate
 - [ ] `bin/cila-run` headless loop; PR design-review GitHub Action (`claude-code-action@v1`)
 - [ ] Mobbin MCP + WebSight/Vision2UI offline datasets *(Steel-driven inspiration retrieval moved to Phase 1.5)*
-- [ ] Heavier wow at scale: 3D model/asset pipelines (poly.pizza / Poly Haven), AI image-gen MCP in the loop, full best-of-N hero exploration *(`skills/r3f`/`skills/shaders` + base components landed in Phase 1.5)*
+- [~] Heavier wow at scale: AI hero-art skill ✓ (`skills/hero-art`); 3D model/asset pipelines (poly.pizza / Poly Haven) still pending *(best-of-N hero exploration done — see `explore`; `r3f`/`shaders` + components landed in Phase 1.5)*
 - [ ] Figma Dev Mode MCP + Code to Canvas (optional design source/roundtrip)
 - [ ] Optional v0 Platform API as an architecturally-different generator
 

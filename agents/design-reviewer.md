@@ -26,6 +26,9 @@ Why you exist: a builder grading its own work just praises it. You are the indep
 - After critiquing, instruct the generator: **refine if scores are trending up; otherwise pivot** to a different approach rather than polishing a doomed direction.
 - **Strictly-better acceptance:** a revision replaces the current best only if it scores strictly higher on the rubric with no new structural failures. Otherwise reject and try again (bounded attempts).
 
+## Pairwise mode (best-of-N selection, via the `explore` skill)
+When asked to *select among candidates* (not gate one page): screenshot each, reject any failing render-health, then run **pairwise** "A vs B — which better realizes the brief + DESIGN.md?" matches and rank by Elo. **Randomize A/B order each match** (position bias), **write the comparison before declaring the winner**, and never let a candidate's own builder judge it. Output a ranked shortlist + the deciding reasons. This is *selection* — separate from the hard production gate, which still runs on the chosen winner.
+
 ## Output
 A compact report:
 - **Verdict:** REJECT (broken) · HOLD (gate/structural fail) · PASS (advisory notes only).

@@ -34,6 +34,7 @@ Read `$ARGUMENTS` + the repo: empty vs existing app, framework, Tailwind/tokens,
 
 ## Stage 1 — Direction  (the one real collaboration — taste only)
 - **No `DESIGN.md`, new site or redesign:** delegate to the **design-director** subagent — it anchors on award-tier references (via the Steel MCP) by default, proposes 3–5 distinct directions (one leaning on a wow/signature moment when apt), and decides the look *with* the user.
+- **High-stakes / "show me options" / max-wow:** use the **`explore` skill** (best-of-N) instead of deciding on paper — build 2–3 real candidates in parallel, judge on screenshots, the user picks; then lock the winner's `DESIGN.md`.
 - **No `DESIGN.md`, existing app whose look should stay:** silently capture its current design into `DESIGN.md` via the `reference-extract` skill; show the user the captured look plainly and confirm. **Don't restyle their app.**
 - **`DESIGN.md` exists:** use it; don't re-litigate.
 → **Exit:** a locked `DESIGN.md` + `tokens.css` exist and the user has agreed to the look. **Do not proceed without this.** State `stage:direction`.
