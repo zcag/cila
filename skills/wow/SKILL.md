@@ -32,7 +32,7 @@ This is deliberate: the production gates are right for the whole page and were a
 - **Accessibility is never traded for spectacle.** Every animation has a `prefers-reduced-motion` path (static frame / no loop); video gets a static poster. Canvas/3D keeps the page keyboard-usable with a meaningful fallback. The a11y + reduced-motion gates are hard fails — carve-out included.
 - **Perf is budgeted, not ignored.** Heavy hero → showcase Lighthouse profile (looser LCP/TBT). Lazy-load/code-split islands, compress assets.
 - **Tokens, not hardcoded color.** Nothing bypasses the token system.
-- **One moment, not everything.** Restraint is what reads as premium.
+- **One *bold* moment, quiet around it.** There is no "overdoing it" on the signature — push it to the most striking version (make people *stop*); timidity is the failure, not excess. Restraint applies to *everything else* — that contrast is what reads as premium. Build the boldest cut first to set the bar.
 
 ## Flow
 Concept (mandatory references) → name one signature moment in `DESIGN.md` → pick the medium (asset over CSS) → build it in an isolated carve-out → reduced-motion fallback → `design-reviewer` (showcase perf, strict a11y, judges the moment for *meaning*, not just presence) → iterate until it lands.

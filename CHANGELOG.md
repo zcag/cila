@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.3.1 — 2026-05-27
+
+- **Sharper anti-timidity.** `design-director` and `wow` now state it plainly: on the signature moment there is **no "overdoing it"** — aim to make people *stop*, commit to the boldest cut first and pull back only if it's genuinely too much; **timidity is the only real failure**, "clean but forgettable" is a fail. Restraint still applies to *everything else* (one bold moment, quiet around it) — that contrast reads as premium. (Distilled from a review of the older forge landing setup, which set the bar with "there is no overdoing it.")
+
 ## 0.3.0 — 2026-05-27
 
 **The prune.** cila had grown large, token-heavy, and hard to work with, and live runs showed its encoded expertise wasn't translating to applied output — while its own gates were *throttling* the hero wow (see `docs/VALIDATION.md`). This release cuts deep, removes the dumb constraints, and reinvests in wow. The content/marketing leg (the proven win) is untouched.
