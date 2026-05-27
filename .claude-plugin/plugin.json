@@ -1,0 +1,7 @@
+{
+  "name": "cila",
+  "version": "0.0.1",
+  "description": "A portable design studio for Claude Code — produces gorgeous, production-grade websites via collaborative aesthetic direction, a token-locked design contract, premium component registries, a visual-critique build loop, and machine-checkable production gates.",
+  "author": { "name": "Cagdas" },
+  "keywords": ["frontend", "design", "ui", "tailwind", "shadcn", "design-system", "accessibility"]
+}
