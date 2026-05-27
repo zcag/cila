@@ -22,6 +22,36 @@ can satisfy tastefully and minimally, then sails past.**
 
 Every soft instruction that matters must be converted into one of these three.
 
+### Corollary: the production gates throttle the hero wow (a self-imposed ceiling)
+
+The wow ceiling is **not purely a model limitation** — cila's own gates actively prevent
+the ambitious hero. Asked to morph an agent's raw text into a rendered canvas, the builder
+shipped a generic staggered reveal and **explained why**: *"no non-composited animations …
+CLS 0.000 … a hard opacity switch carried by transforms, so text is never sampled
+mid-fade."* It faked the morph as a transform/opacity stagger **to stay gate-clean.** The
+very rules that make cila's output production-grade — **compositor-only (transform/opacity
+only), zero-CLS, axe-deterministic mid-animation** — are exactly what a real signature
+morph must break (layout animation, resizing, cross-fades, canvas/WebGL).
+
+**These are the right defaults for the *whole page* and the wrong cage for the *one
+signature moment*.** The fix is **scoped gates**: a declared signature-moment zone gets a
+**carve-out** — richer techniques allowed (layout/canvas/WebGL/SMIL), ideally **isolated**
+(a canvas or contained layer) so page-level CLS/perf aren't hit, under the showcase perf
+profile — while the rest of the page stays strict. **Never relax the non-negotiables:**
+reduced-motion fallback, no seizure risk, keyboard/focus intact. Strict everywhere by
+default; one contained, opt-in zone allowed to be spectacular.
+
+### Reframe: wow comes from real assets, not prose-generated CSS
+
+A coding agent prompted in prose reliably produces *tasteful-but-generic* motion — five
+iterations could not get it to hand-roll a meaningful bespoke animation; it always reverted
+to opacity/translate. **Genuinely striking, meaningful wow comes from a real asset**: a
+product **video / screen-recording** (the truth, recorded — how Linear/Vercel do their
+hero), a designed **Rive/Lottie**, a **live product embed**, a hand-built **canvas/WebGL**
+scene, or a **pre-built award-tier interaction component** — not CSS the agent improvises.
+cila's wow leg should route to these, and set an **honest floor** (tasteful, shows-product,
+accessible) rather than promise prose-summoned spectacle.
+
 ---
 
 ## Run log
@@ -51,6 +81,19 @@ Every soft instruction that matters must be converted into one of these three.
   abstract SVG). → confirms it keeps choosing *small + abstract + safe* over *large + real
   + bold* unless the constraint removes the wiggle room.
 
+### Run 2c — meaningful hero animation attempt → shipped static (live-watched)
+- Prompted with a concrete "morph raw agent output into the rendered canvas" spec.
+- Output **did not change**: identical generic stagger (13 `mira-rise` + 1 `mira-fade-rise`,
+  transform/opacity, 1820ms max delay, **no** before-state / typing / morph). Repeated
+  iterations didn't move it. → the ceiling above.
+- The builder's own report revealed the cause: it faked the morph as a stagger **to satisfy
+  the compositor-only / zero-CLS / axe-deterministic gates** (see corollary above).
+- Decision: **disabled the animation and shipped the static framed-doc hero** to wrap mira —
+  clean, shows the product, "tasteful not wow." Stopped the iteration loop (diminishing
+  returns; ~20-min cycles).
+- Process note: each correction cost a full ~20-min rebuild cycle — the build loop is too
+  slow for tight art-direction iteration. Cheap, fast hero-only previews matter.
+
 ---
 
 ## Observed failure modes → required fix
@@ -75,6 +118,11 @@ Every soft instruction that matters must be converted into one of these three.
 4. **Impact/wow axis → blocking** in `design-reviewer`.
 5. **First-cut checkpoint → hard stop** in the orchestrator.
 6. **De-bias direction selection** away from the safe-editorial lane; visual products → product output is the spectacle.
+7. **Signature-moment carve-out (scoped gates)** — a declared hero zone may use richer techniques (layout/canvas/WebGL/SMIL), isolated + showcase perf profile, while the page stays strict; reduced-motion/seizure/keyboard non-negotiables always hold. *Resolves the gate-throttle ceiling.*
+8. **Route wow to real assets** — video/screen-recording, Rive/Lottie, live product embed, hand-built canvas/WebGL, or pre-built award-tier components — not prose-generated CSS. Set an honest floor; offer asset-based wow instead of promising prose-summoned spectacle.
+9. **Fast hero-only preview** — art-direction iteration needs cheap, fast previews, not a full ~20-min rebuild per correction. The build loop is too slow for tight visual iteration.
+
+The blocking Impact/wow axis (#6 in the table) must judge the signature moment for **meaning** — does it dramatize the product's core idea? — since a presence/size gate cannot catch a hollow-but-present animation.
 
 **Validation rule:** after building these, re-run mira (and the from-scratch test) and
 confirm the *output* changes — never trust the prose again. A gate that doesn't move real
