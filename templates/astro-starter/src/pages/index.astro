@@ -51,7 +51,12 @@ const features = [
       cila
     </a>
     <nav class="flex items-center gap-6 text-sm text-fg-muted">
-      <a href="#features" class="transition-colors hover:text-fg">Features</a>
+      <!-- py-2/-my-2: ≥24px hit target (WCAG 2.5.8) without shifting the row. -->
+      <a
+        href="#features"
+        class="-my-2 inline-flex items-center py-2 transition-colors hover:text-fg"
+        >Features</a
+      >
       <a
         href="#"
         class="hidden rounded-full border border-border-strong px-4 py-1.5 font-medium text-fg transition-colors hover:border-brand hover:text-brand sm:inline-block"
@@ -112,7 +117,7 @@ const features = [
             cila starter · Astro + Tailwind v4
           </p>
           <h1
-            class="reveal-item text-5xl font-semibold leading-[0.95] tracking-tight text-fg sm:text-6xl lg:text-7xl"
+            class="hero-title reveal-item text-5xl font-semibold leading-[0.95] tracking-tight text-fg sm:text-6xl lg:text-7xl"
           >
             Design that doesn't
             <span class="text-brand"> drift</span> to the mean.
@@ -259,30 +264,63 @@ const features = [
 </Base>
 
 <style>
-  /* ── One orchestrated page-load reveal. CSS-only, transform/opacity only. ──
-     The container fades; children stagger up. Fully disabled under
-     prefers-reduced-motion (no movement, content shown instantly). */
-  .reveal-item {
-    opacity: 0;
-    transform: translateY(12px);
-    animation: reveal-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  /* ── View Transitions ─────────────────────────────────────────────────────
+     Opt the document into the native cross-document/SPA transition. With
+     <ClientRouter /> (Base.astro) this cross-fades same-origin navigations;
+     `auto` lets the UA pick the default animation. No-op where unsupported. */
+  @view-transition {
+    navigation: auto;
   }
-  .reveal-item:nth-child(1) {
-    animation-delay: 0.05s;
+
+  /* Give the hero headline a named transition so it MORPHS (rather than
+     cross-fades) when it persists across a navigation — e.g. shrinking into a
+     header title on the next page. The name must be unique per page.
+     Guarded by reduced-motion: we drop the name so the element just swaps. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-title {
+      view-transition-name: hero-title;
+    }
   }
-  .reveal-item:nth-child(2) {
-    animation-delay: 0.12s;
-  }
-  .reveal-item:nth-child(3) {
-    animation-delay: 0.19s;
-  }
-  .reveal-item:nth-child(4) {
-    animation-delay: 0.26s;
-  }
-  /* the specimen card lives in a sibling column; give it its own beat */
-  .reveal > div:last-child .reveal-item,
-  .reveal > div:last-child {
-    animation-delay: 0.3s;
+
+  /* ── Reveal: native CSS scroll-driven animation (animation-timeline: view()).
+     Each `.reveal-item` fades + rises as it enters the scrollport, driven by
+     the browser on the compositor — NO JS, NO IntersectionObserver. Items
+     already in view at load (the hero) resolve straight to their rest state.
+
+     Progressive enhancement (matches templates/wow/css/ScrollReveal):
+       • Wrapped in @supports (animation-timeline: view()) — browsers without
+         scroll-driven animations render every item visible at rest (the base
+         rule below), never hidden-and-stuck.
+       • prefers-reduced-motion: no-preference gate inside, plus a hard
+         reduced-motion freeze after, so motion-averse users see content at rest.
+     transform/opacity only → compositor-friendly, CLS-safe. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal-item {
+        opacity: 0;
+        transform: translateY(12px);
+        animation: reveal-up linear forwards;
+        animation-timeline: view();
+        /* play from "entering the scrollport" to "30% covered", then hold */
+        animation-range: entry 0% cover 30%;
+      }
+
+      /* Stagger via per-item range offsets (pure CSS, no setTimeout). */
+      .reveal-item:nth-child(2) {
+        animation-range: entry 6% cover 36%;
+      }
+      .reveal-item:nth-child(3) {
+        animation-range: entry 12% cover 42%;
+      }
+      .reveal-item:nth-child(4) {
+        animation-range: entry 18% cover 48%;
+      }
+
+      /* The specimen card is in a sibling column; give it a later beat. */
+      .reveal > div:last-child .reveal-item {
+        animation-range: entry 24% cover 54%;
+      }
+    }
   }
 
   @keyframes reveal-up {
@@ -292,6 +330,7 @@ const features = [
     }
   }
 
+  /* Hard reduced-motion freeze (also overrides the @supports path above). */
   @media (prefers-reduced-motion: reduce) {
     .reveal-item {
       opacity: 1;

@@ -44,6 +44,29 @@ export const viewport: Viewport = {
 // Kept as a raw string so it injects synchronously in <head> before hydration.
 const noFlashTheme = `(()=>{try{const s=localStorage.getItem("theme");const d=s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
 
+// Speculation Rules: progressively prerender same-origin navigations on a
+// `moderate` signal (pointerdown / brief hover), so a click lands on an already-
+// rendered page. Pattern: a `where`-clause that targets in-site links via an
+// href-prefix match and EXCLUDES anything tagged `[rel~="nofollow"]` or
+// non-prerenderable routes. Tune `eagerness` (conservative ≤ moderate ≤ eager)
+// to trade prefetch cost for instant-nav coverage. Pure progressive enhancement:
+// the JSON is ignored by browsers without the Speculation Rules API. Same-origin
+// only keeps it build-time-safe (no third-party prefetch). Injected as a static
+// string so it ships in the initial <head> HTML with no hydration cost.
+const speculationRules = JSON.stringify({
+  prerender: [
+    {
+      where: {
+        and: [
+          { href_matches: "/*" },
+          { not: { selector_matches: "[rel~=nofollow]" } },
+        ],
+      },
+      eagerness: "moderate",
+    },
+  ],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -51,6 +74,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlashTheme }} />
+        <script
+          type="speculationrules"
+          dangerouslySetInnerHTML={{ __html: speculationRules }}
+        />
       </head>
       <body>{children}</body>
     </html>

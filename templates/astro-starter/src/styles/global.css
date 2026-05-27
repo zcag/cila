@@ -8,8 +8,8 @@
    `wght.css` pulls the full variable weight range in one woff2 per subset.
    Faces: Bricolage Grotesque (display, opsz+wdth+wght) + Hanken Grotesk (body).
    Both OFL-1.1. The matching woff2 is <link rel="preload">-ed in Base.astro. */
-@import "@fontsource-variable/bricolage-grotesque/wght.css";
-@import "@fontsource-variable/hanken-grotesk/wght.css";
+@import url("@fontsource-variable/bricolage-grotesque/wght.css");
+@import url("@fontsource-variable/hanken-grotesk/wght.css");
 
 @layer base {
   /* Modern reset essentials (Tailwind v4 preflight covers most; these refine). */
@@ -22,7 +22,7 @@
   html {
     /* native form controls + scrollbars match the active scheme */
     color-scheme: light dark;
-    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
 
@@ -30,13 +30,16 @@
     background-color: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-body);
+
     /* opsz/optical niceties + crisp rendering */
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizelegibility;
+
     /* fluid baseline body size */
     font-size: 1rem;
     line-height: 1.6;
+
     /* keep long words from forcing horizontal scroll */
     overflow-wrap: break-word;
   }
@@ -73,6 +76,7 @@
     outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
+
   /* don't show the ring on mouse click, only keyboard */
   :focus:not(:focus-visible) {
     outline: none;

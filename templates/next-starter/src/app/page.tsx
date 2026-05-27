@@ -55,8 +55,14 @@ export default function Page() {
           <span className="inline-block size-3 rounded-full bg-brand" aria-hidden="true" />
           cila
         </Link>
+        {/* nav links carry vertical padding so each hit target clears the
+            WCAG 2.5.8 (Target Size, Minimum) 24px floor — the ~22px text line
+            plus py-1.5 (12px) lands well over 24px without changing the look */}
         <nav className="flex items-center gap-6 text-sm text-fg-muted">
-          <a href="#features" className="transition-colors hover:text-fg">
+          <a
+            href="#features"
+            className="-mx-1 rounded px-1 py-1.5 transition-colors hover:text-fg"
+          >
             Features
           </a>
           <a
@@ -89,7 +95,16 @@ export default function Page() {
                 <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
                 cila starter · Next.js + Tailwind v4
               </p>
-              <h1 className="text-5xl font-semibold leading-[0.95] tracking-tight text-fg sm:text-6xl lg:text-7xl">
+              {/* view-transition-name makes this heading its OWN snapshot in the
+                  cross-document View Transitions enabled in globals.css — it gets
+                  captured + tweened independently across navigations instead of
+                  cross-fading with the page. Set inline (one-off; not a color, so
+                  it stays within the token contract). Neutralized for
+                  reduced-motion via the ::view-transition guard in globals.css. */}
+              <h1
+                className="text-5xl font-semibold leading-[0.95] tracking-tight text-fg sm:text-6xl lg:text-7xl"
+                style={{ viewTransitionName: "hero-title" }}
+              >
                 Ship a product surface that{" "}
                 <span className="text-brand">holds up</span>.
               </h1>
@@ -143,11 +158,15 @@ export default function Page() {
             </h2>
           </div>
 
+          {/* reveal-on-scroll = native CSS scroll-driven entrance (animation-
+              timeline: view(), see globals.css). @supports + reduced-motion
+              gated there, so non-supporting browsers / motion-sensitive users
+              just see the cards at rest — no JS, no IntersectionObserver. */}
           <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
             {features.map((f) => (
               <li
                 key={f.kicker}
-                className="group flex flex-col gap-4 bg-surface-raised p-8 transition-colors hover:bg-surface"
+                className="reveal-on-scroll group flex flex-col gap-4 bg-surface-raised p-8 transition-colors hover:bg-surface"
               >
                 <span className="font-mono text-sm text-fg-subtle transition-colors group-hover:text-brand">
                   {f.kicker}

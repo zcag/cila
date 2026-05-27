@@ -10,9 +10,28 @@
    Both OFL-1.1. Next inlines + fingerprints these woff2 at build time; the
    matching latin woff2 is also <link rel="preload">-ed in layout.tsx to kill
    FOUT. Importing the Fontsource CSS here (rather than next/font/google) keeps
-   the fonts fully self-hosted and bit-identical to the Astro marketing starter. */
-@import "@fontsource-variable/bricolage-grotesque/wght.css";
-@import "@fontsource-variable/hanken-grotesk/wght.css";
+   the fonts fully self-hosted and bit-identical to the Astro marketing starter.
+   `url()` notation (not bare string) keeps stylelint-config-standard happy. */
+@import url("@fontsource-variable/bricolage-grotesque/wght.css");
+@import url("@fontsource-variable/hanken-grotesk/wght.css");
+
+/* ── Cross-document View Transitions (progressive enhancement) ───────────────
+   `@view-transition { navigation: auto }` opts the WHOLE App Router into the
+   native View Transitions API for same-origin pushes/replaces/traversals — a
+   pure-CSS, zero-JS cross-document transition. We deliberately use this CSS
+   route over Next's `unstable_ViewTransition` component, which still needs the
+   experimental `viewTransition: true` next.config flag and is flagged
+   "not recommended for production" (Next 16.x). The CSS at-rule degrades
+   silently: browsers without support just navigate normally, no animation.
+
+   The hero heading carries `view-transition-name: hero-title` (set in
+   page.tsx), so that element is captured + tweened as its own snapshot across
+   navigations instead of cross-fading with the rest of the page. Reduced-motion
+   is honored by the guard at the bottom of this file, which neutralizes the
+   ::view-transition pseudos. */
+@view-transition {
+  navigation: auto;
+}
 
 @layer base {
   /* Modern reset essentials (Tailwind v4 preflight covers most; these refine). */
@@ -25,7 +44,7 @@
   html {
     /* native form controls + scrollbars match the active scheme */
     color-scheme: light dark;
-    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
 
@@ -33,23 +52,27 @@
     background-color: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-body);
+
     /* opsz/optical niceties + crisp rendering */
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizelegibility;
+
     /* fluid baseline body size */
     font-size: 1rem;
     line-height: 1.6;
+
     /* keep long words from forcing horizontal scroll */
     overflow-wrap: break-word;
   }
 
-  /* Display face for headings; tight tracking + optical size for character. */
+  /* Display face for headings; tight tracking + optical size for character.
+     text-wrap: balance keeps h1–h3 (and beyond) free of orphan words. */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.02em;
-    text-wrap: balance; /* avoid orphan words in headlines */
+    text-wrap: balance;
   }
 
   /* Better paragraph wrapping (Vercel guideline). */
@@ -76,6 +99,7 @@
     outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
+
   /* don't show the ring on mouse click, only keyboard */
   :focus:not(:focus-visible) {
     outline: none;
@@ -88,8 +112,37 @@
   }
 }
 
+/* ── Scroll-driven reveal (native CSS, progressive enhancement) ──────────────
+   Elements tagged `.reveal-on-scroll` fade + rise into place as they enter the
+   viewport, driven by a NATIVE `animation-timeline: view()` — no JS, no
+   IntersectionObserver, off the main thread. Gated behind @supports so only
+   browsers with scroll-driven animations opt in; everywhere else the element is
+   simply visible (the @supports block never applies, so the default state is
+   the rest state). transform/opacity only → compositor-friendly. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* runs while the element travels from just-entering to ~40% up the viewport */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(1.5rem);
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+
+@keyframes reveal-rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ── prefers-reduced-motion: hard baseline. Any motion in components must be
-   guarded; this is the global safety net so nothing animates if asked not to. */
+   guarded; this is the global safety net so nothing animates if asked not to.
+   Also neutralizes the View Transition snapshots so cross-document navigation
+   is an instant cut (no cross-fade / no hero tween) for motion-sensitive users. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -98,5 +151,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
