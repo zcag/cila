@@ -12,6 +12,7 @@ cila's default stack is **100% free and keyless**. The items below are **opt-in*
 | **v0 Platform API** (`explore`) | An architecturally-different generator for best-of-N | **Paid** (Premium/Team) + usage | OpenAI-compatible `api.v0.dev/v1`; optional explorer backend |
 | **Chrome DevTools MCP** | Interaction-driven CWV/INP traces beyond the Lighthouse-CI gate | **Free** (keyless) | `claude mcp add chrome-devtools -s user -- npx chrome-devtools-mcp@latest` (opt-in perf profiling; Lighthouse CI is the enforced gate) |
 | **Browser MCP for inspiration** — self-hosted **Steel** or `@playwright/mcp` | Screenshot live award-tier galleries to anchor design (`skills/inspiration`) | **Free** (self-hosted Steel, or the Playwright MCP) | The agent **detects when it's missing and asks you to wire one** — cila ships **no private endpoints**. Without it, work from a provided reference. |
+| **Cross-family bench judge** — a non-Claude model for cila-Bench (`bench/`) | More honest pairwise judging (reduces self-preference bias) | **Paid** API (key) | Default is keyless Claude-as-judge + a human-rated holdout; route the bench judge to another model family via its API key. Bench is **dev-time only** (no production signal). |
 | **Component Pro tiers** — Aceternity Pro / Magic UI Pro | Prebuilt page *templates* | **Paid** ~$199 one-time each | Not required — the free components are what produce the look |
 | **Chromatic** | Hosted visual-regression review UI | **Free tier** → paid by snapshot volume | Optional — cila's Playwright VRT is free + local |
 

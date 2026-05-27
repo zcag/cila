@@ -1,0 +1,16 @@
+[
+  { "brief": "saas-landing",       "a": "cila@v3", "b": "cila@v2", "winner": "a",   "criterion": "overall" },
+  { "brief": "saas-landing",       "a": "cila@v2", "b": "cila@v1", "winner": "a",   "criterion": "overall" },
+  { "brief": "saas-landing",       "a": "cila@v3", "b": "v0",       "winner": "a",   "criterion": "overall" },
+  { "brief": "portfolio",          "a": "cila@v3", "b": "cila@v2", "winner": "a",   "criterion": "overall" },
+  { "brief": "portfolio",          "a": "cila@v2", "b": "v0",       "winner": "b",   "criterion": "overall" },
+  { "brief": "portfolio",          "a": "cila@v1", "b": "v0",       "winner": "tie", "criterion": "overall" },
+  { "brief": "editorial-marketing","a": "cila@v3", "b": "cila@v1", "winner": "a",   "criterion": "overall" },
+  { "brief": "editorial-marketing","a": "cila@v2", "b": "v0",       "winner": "a",   "criterion": "overall" },
+  { "brief": "docs-home",          "a": "cila@v3", "b": "v0",       "winner": "a",   "criterion": "overall" },
+  { "brief": "docs-home",          "a": "cila@v1", "b": "v0",       "winner": "b",   "criterion": "overall" },
+  { "brief": "app-dashboard",      "a": "cila@v2", "b": "cila@v1", "winner": "a",   "criterion": "overall" },
+  { "brief": "app-dashboard",      "a": "cila@v3", "b": "cila@v2", "winner": "tie", "criterion": "overall" },
+  { "brief": "ecommerce-pdp",      "a": "cila@v3", "b": "v0",       "winner": "a",   "criterion": "overall" },
+  { "brief": "ecommerce-pdp",      "a": "cila@v1", "b": "v0",       "winner": "b",   "criterion": "overall" }
+]

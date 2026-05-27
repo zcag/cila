@@ -55,7 +55,7 @@ On entry write `stage:review`. Delegate to the **design-reviewer** subagent: ren
 → **Exit:** every `ACCEPTANCE.md` criterion is ticked and design-reviewer + a11y-auditor return **PASS** (no hard failures). Then set `gate_required:false` and `stage:done`.
 
 ## Stage 5 — Hand back
-Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout. If the user **edits** what you shipped, that's signal — let the `taste` skill capture the preference for next time.
+Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout. If the user **edits** what you shipped, that's signal — let the `taste` skill capture the preference (diff→one-line rule) for next time. On a gate PASS, `taste` also **promotes the output to the example bank** if it clears the cila-Bench standing gate. If the user says "remember / always / stop / I prefer …" about *how* cila builds, invoke `taste`.
 
 ---
 **Budget:** default `N=3` for `explore` and static-first judging; reserve best-of-N + trajectory judging on *every* candidate for flagship heroes (vision tokens ~3×). Offer draft / standard / flagship depth when cost matters.
