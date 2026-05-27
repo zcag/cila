@@ -18,7 +18,7 @@ The same model produces wildly different quality depending on the **harness** ar
 
 ## Status
 
-**Design / research phase.** This repo currently holds the research archive and the build plan. Implementation is staged — see [`docs/ROADMAP.md`](docs/ROADMAP.md).
+**Phase 1 built** (the lean core). The entire interface is one thing — **`/cila:go`** — a model-invocable skill that also fires when you simply describe what you want ("a landing page for X", "redesign this", "make this page nicer"). It auto-detects everything (new vs existing repo, framework, scaffold vs adopt), collaborates with you *only* on the look, builds, and runs its production gates — no flags, modes, or jargon. Next: a live end-to-end validation run, then the compounding/scale phases — see [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Docs
 

@@ -15,19 +15,16 @@ cila/
 ├── .claude-plugin/
 │   ├── plugin.json          # manifest (+ dependencies: frontend-design)
 │   └── marketplace.json     # local marketplace entry → installable
-├── commands/
-│   ├── cila-design.md        # /cila:design  — collaborative aesthetic direction → locked DESIGN.md
-│   ├── cila-init.md          # /cila:init    — materialize per-repo artifacts
-│   └── cila-review.md        # /cila:review  — run the visual-critique loop on demand
-├── agents/
-│   ├── design-director.md    # proposes N distinct directions, decides WITH the user
-│   ├── design-reviewer.md    # evaluator: drives Playwright MCP, screenshots, critiques (never self-grades)
-│   └── a11y-auditor.md        # WCAG 2.2 AA gate
 ├── skills/
+│   ├── go/                   # THE front door: /cila:go (also auto-invoked). Orchestrates everything; auto-detects state, collaborates only on the look
 │   ├── design-tokens/        # OKLCH token system authoring (Tailwind v4 @theme, one --brand-hue)
-│   ├── reference-extract/    # brandmd/design-extract — decompose a reference into tokens
+│   ├── reference-extract/    # decompose a reference (or an existing app's look) into tokens
 │   ├── motion/               # Motion (motion/react) snippets + reduced-motion guardrails
-│   └── frontend-aesthetics/  # cila's aesthetic-family presets (extends the official skill)
+│   └── frontend-aesthetics/  # aesthetic families + AI-slop fingerprint counters
+├── agents/                   # internal machinery the orchestrator delegates to (the user never calls these directly)
+│   ├── design-director.md    # proposes distinct directions, decides the look WITH the user
+│   ├── design-reviewer.md    # evaluator: Playwright screenshots + gates + critique (never self-grades)
+│   └── a11y-auditor.md        # WCAG 2.2 AA gate
 ├── hooks/
 │   └── hooks.json            # SessionStart (load taste profile) ; Stop/SubagentStop (production gate)
 ├── .mcp.json                 # shadcn(+registries), playwright ; chrome-devtools/figma lazy
@@ -35,7 +32,7 @@ cila/
 └── bin/cila-run              # headless `claude -p` loop for unattended/CI runs
 ```
 
-**Tier 2 — per-repo (materialized by `/cila:init`).** Some things must live in the target repo:
+**Tier 2 — per-repo (materialized silently by `/cila:go`).** Some things must live in the target repo:
 
 ```
 your-site/
@@ -48,15 +45,16 @@ your-site/
 
 ## "Point any agent at it" — three paths
 
-1. **Already global** — plugin syncs via dotty; every repo has `/cila:*` + the subagents + MCP config.
-2. **Bootstrap a fresh repo** — `/cila:init` inspects the repo, picks Astro vs Next, drops in tokens/DESIGN.md/gates, and writes a pointer into that repo's `CLAUDE.md` so the next agent self-discovers the rig.
+1. **Already global** — plugin syncs via dotty; every repo has `/cila:go` (which also auto-fires when the user describes a site to build) + the subagents + MCP config.
+2. **Bootstrap a fresh repo** — `/cila:go` (or just asking for a site) silently detects state, scaffolds or adopts, and writes a pointer into the repo's `CLAUDE.md` so the next agent self-discovers the rig.
 3. **Foreign machine** — `git`/URL install of the marketplace.
 
 ## The build loop
 
 ```
-/cila:design ──> design-director proposes 3–5 DISTINCT directions (verbalized sampling)
-                 → decide WITH the user → write locked DESIGN.md + tokens.css
+/cila:go ──> assess silently (new vs existing · framework · intent) — only ask about the look
+        │    └─ if no DESIGN.md: design-director proposes 3–5 distinct directions →
+        │       decide WITH the user → lock DESIGN.md + tokens.css
         │
         ▼
    Planner ──> features.json (binary `passes`) + plan          [file-mediated handoff]

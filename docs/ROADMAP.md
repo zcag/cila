@@ -24,16 +24,17 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 - [x] `plugin.json` manifest  *(basic; `dependencies: frontend-design` + `userConfig` deferred to install-validation)*
 - [x] `marketplace.json` (installable)
 - [x] `.mcp.json` — shadcn + playwright  *(registry list lives in the starter's `components.json`)*
+- [x] **`skills/go` orchestrator** — the single front door `/cila:go` (model-invocable; auto-detects state, delegates to subagents). The separate `design|init|review` commands were consolidated into it.
 
 **Collaborative design**
-- [x] `/cila:design` command + `design-director` subagent — verbalized sampling, decide *with* the user, write locked `DESIGN.md`
+- [x] `design-director` subagent — verbalized sampling, decide the look *with* the user, write locked `DESIGN.md` (invoked by `/cila:go`)
 - [x] `templates/DESIGN.md` (aesthetic direction, negative constraints, tokens, type, motion, components)
 - [x] `skills/design-tokens` — OKLCH, Tailwind v4 `@theme`, single `--brand-hue`; tweakcn seeding
 - [x] `skills/reference-extract` — decompose a reference (brandmd/design-extract) into tokens
 
 **Build + visual loop**
 - [x] `agents/design-reviewer` (evaluator) — Playwright MCP; screenshot matrix; render-health gate; critique vs DESIGN.md; pivot-or-refine; strictly-better acceptance
-- [x] `/cila:review` command
+- [x] review step (folded into `/cila:go`; delegates to `design-reviewer`)
 - [x] `skills/motion` — Motion (`motion/react`) + `prefers-reduced-motion` + compositor-only
 - [x] `skills/frontend-aesthetics` — 9 families + AI-slop fingerprint counters
 
@@ -48,11 +49,11 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 - [x] `hooks/hooks.json` — SessionStart contract announcement  *(hard `Stop`/`SubagentStop` gate deferred — relying on `/cila:review` + CI for now)*
 
 **Materialization**
-- [x] `/cila:init` — inspect repo, scaffold-or-overlay, drop tokens/DESIGN.md/gates/components.json + CLAUDE.md pointer
+- [x] materialize step (folded into `/cila:go`) — inspect repo, scaffold-or-overlay, drop tokens/gates/components.json + CLAUDE.md pointer
 - [x] `templates/astro-starter` (build-verified) ; [ ] `templates/next-starter` (when first app needs it)
 - [x] `templates/gates/` configs
 - [~] Visual-asset wiring — Fontsource fonts in starter ✓ ; Iconify MCP / Pexels+sharp / React Bits backgrounds pending
-- [ ] `/cila:init --adopt` — brownfield: capture an existing app's design into `DESIGN.md` (proposed)
+- [x] brownfield adopt — auto-detected inside `/cila:go` (no flag): capture an existing app's design into `DESIGN.md` without restyling it
 
 **Validation**
 - [ ] Install cila (local marketplace) and take a real landing page through `/cila:design` → build → `/cila:review` → gates
