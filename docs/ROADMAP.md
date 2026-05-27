@@ -24,7 +24,7 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 - [x] `plugin.json` manifest  *(basic; `dependencies: frontend-design` + `userConfig` deferred to install-validation)*
 - [x] `marketplace.json` (installable)
 - [x] `.mcp.json` — shadcn + playwright  *(registry list lives in the starter's `components.json`)*
-- [x] **`skills/go` orchestrator** — the single front door `/cila:go` (model-invocable; auto-detects state, delegates to subagents). The separate `design|init|review` commands were consolidated into it.
+- [x] **`skills/go` orchestrator** — the single front door `/cila:go` (model-invocable; auto-detects state, delegates to subagents). The separate `design|init|review` commands were consolidated into it. Now a **staged contract** (ordered stages + exit criteria; never-skip / never-done-on-failing-gate; `.cila/state.json` progress).
 
 **Collaborative design**
 - [x] `design-director` subagent — verbalized sampling, decide the look *with* the user, write locked `DESIGN.md` (invoked by `/cila:go`)
@@ -46,7 +46,7 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 - [x] Lighthouse CI budgets (LCP/CLS/TBT + non-composited-animations)
 - [x] design-lint (`stylelint.config.mjs` — bans raw hex, forces `var(--token)`)
 - [x] Playwright visual regression (masked, animations disabled)
-- [x] `hooks/hooks.json` — SessionStart contract announcement  *(hard `Stop`/`SubagentStop` gate deferred — relying on `/cila:review` + CI for now)*
+- [x] `hooks/hooks.json` — SessionStart contract announcement + **`Stop`-gate hook** (`hooks/stop-gate.sh`): blocks declaring done while `.cila/state.json` flags ungated UI changes
 
 **Materialization**
 - [x] materialize step (folded into `/cila:go`) — inspect repo, scaffold-or-overlay, drop tokens/gates/components.json + CLAUDE.md pointer
@@ -68,7 +68,7 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 - [x] `skills/r3f` — React Three Fiber production patterns (perf, damping, reduced-motion)
 - [x] `skills/shaders` — GLSL background recipes (gradient/fbm/domain-warp/grain)
 - [x] Showcase gate profile (`lighthouserc.showcase.json`) + `reduced-motion.spec.ts` hard gate — flex perf for heavy heroes, keep a11y/reduced-motion/layout/tokens strict
-- [~] `templates/wow/` — build-verified reference components (Tier 1 CSS mesh/grain/scroll · Tier 2 R3F shader+3D · orchestrated motion)
+- [x] `templates/wow/` — build-verified reference components (Tier 1 CSS mesh/grain/scroll · Tier 2 R3F shader+3D · orchestrated motion); all honor reduced-motion + compositor-only + brand tokens
 - [x] design-director anchors on award-tier references by default + proposes a wow direction; [ ] Steel-driven retrieval wired end-to-end
 - [ ] Optional AI hero-art via image-gen MCP (Nano Banana / fal) — needs an API key
 - [ ] Light "explore-then-pick": render top-2 hero concepts before committing

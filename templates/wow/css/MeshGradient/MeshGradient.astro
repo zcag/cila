@@ -1,0 +1,119 @@
+---
+/* ============================================================================
+   MeshGradient.astro — Tier 1 (zero-dep, CSS only, works in static Astro).
+
+   A full-bleed animated "mesh gradient" hero background built from layered
+   radial-gradients that drift on the COMPOSITOR ONLY (we animate `transform:
+   translate3d(...)` + `opacity` on the gradient layers — never the gradient
+   stops, never background-position, never anything that triggers paint/layout).
+
+   Colours come 100% from the brand tokens in src/styles/tokens.css
+   (--color-brand-soft, --color-accent-soft, --color-brand, --color-bg). Re-hue
+   the whole effect by changing --brand-hue. NO hardcoded colour anywhere.
+
+   prefers-reduced-motion → the drift animation is removed and the layers rest
+   at their final transform, leaving a still, fully-composed gradient frame
+   (still gorgeous, just not moving). The global reset in global.css already
+   neutralises animation; the local @media block makes the frozen frame explicit
+   so this component is correct even dropped into a project without that reset.
+   ========================================================================== */
+
+interface Props {
+  /** Extra classes for the wrapping <div> (e.g. positioning / z-index). */
+  class?: string;
+  /** Loop duration in seconds for the slowest drift layer (ambient 18–30s). */
+  duration?: number;
+}
+const { class: className = "", duration = 22 } = Astro.props;
+---
+
+<div class:list={["cila-mesh", className]} aria-hidden="true" style={`--mesh-dur:${duration}s`}>
+  <div class="cila-mesh__layer cila-mesh__layer--a"></div>
+  <div class="cila-mesh__layer cila-mesh__layer--b"></div>
+  <div class="cila-mesh__layer cila-mesh__layer--c"></div>
+</div>
+
+<style>
+  /* The mesh sits behind content; the host decides positioning via `class`.
+     Default is an absolutely-filled, non-interactive backdrop. */
+  .cila-mesh {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    /* base wash so the gradient never reads as floating on raw white/black */
+    background: var(--color-bg);
+    /* isolate so layer blend-modes don't leak onto page content */
+    isolation: isolate;
+  }
+
+  /* Each layer is one big radial blob. We oversize past the edges (-25%/150%)
+     so that translating it never reveals a hard edge. We blur for softness and
+     animate ONLY transform — the cheapest thing the compositor can do. */
+  .cila-mesh__layer {
+    position: absolute;
+    inset: -25%;
+    width: 150%;
+    height: 150%;
+    filter: blur(60px);
+    will-change: transform;
+    /* mix the blobs so overlaps deepen instead of flatly stacking */
+    mix-blend-mode: plus-lighter;
+  }
+
+  .cila-mesh__layer--a {
+    background: radial-gradient(
+      40% 40% at 30% 35%,
+      var(--color-brand-soft) 0%,
+      transparent 70%
+    );
+    animation: cila-mesh-a var(--mesh-dur) ease-in-out infinite alternate;
+  }
+  .cila-mesh__layer--b {
+    background: radial-gradient(
+      45% 45% at 75% 30%,
+      var(--color-accent-soft) 0%,
+      transparent 72%
+    );
+    /* a touch faster + offset phase so the two never lock-step */
+    animation: cila-mesh-b calc(var(--mesh-dur) * 0.82) ease-in-out -4s infinite
+      alternate;
+  }
+  .cila-mesh__layer--c {
+    /* a low-opacity pull of the saturated brand for depth in the lower field */
+    background: radial-gradient(
+      50% 50% at 50% 85%,
+      var(--color-brand) 0%,
+      transparent 70%
+    );
+    opacity: 0.35;
+    animation: cila-mesh-c calc(var(--mesh-dur) * 1.18) ease-in-out -9s infinite
+      alternate;
+  }
+
+  /* translate3d keeps everything on the GPU layer (no layout, no paint). */
+  @keyframes cila-mesh-a {
+    from { transform: translate3d(-6%, -4%, 0) scale(1.05); }
+    to   { transform: translate3d(8%, 6%, 0) scale(1.15); }
+  }
+  @keyframes cila-mesh-b {
+    from { transform: translate3d(6%, 3%, 0) scale(1.1); }
+    to   { transform: translate3d(-7%, -5%, 0) scale(1.2); }
+  }
+  @keyframes cila-mesh-c {
+    from { transform: translate3d(0, 4%, 0) scale(1.1); }
+    to   { transform: translate3d(4%, -6%, 0) scale(1.25); }
+  }
+
+  /* Frozen, fully-composed static frame — no motion, still a finished gradient. */
+  @media (prefers-reduced-motion: reduce) {
+    .cila-mesh__layer {
+      animation: none !important;
+      will-change: auto;
+    }
+    .cila-mesh__layer--a { transform: translate3d(2%, 2%, 0) scale(1.1); }
+    .cila-mesh__layer--b { transform: translate3d(-2%, -1%, 0) scale(1.15); }
+    .cila-mesh__layer--c { transform: translate3d(2%, -2%, 0) scale(1.18); }
+  }
+</style>

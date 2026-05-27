@@ -1,0 +1,88 @@
+---
+/* ============================================================================
+   ScrollReveal.astro — Tier 1 (zero-dep, CSS scroll-driven animations).
+
+   Reveals its children as they scroll into view using the native CSS
+   `animation-timeline: view()` — NO JavaScript, NO IntersectionObserver, NO
+   library. The browser drives the reveal off the element's position in the
+   scrollport, on the compositor.
+
+   Each direct child fades + rises (transform/opacity only). Add `data-stagger`
+   to the wrapper for an index-based delay feel (achieved with per-child
+   `view-timeline` ranges, not setTimeout).
+
+   Progressive enhancement / fallbacks:
+     • Browsers WITHOUT scroll-driven-animation support (`@supports` guard):
+       content is shown normally, no reveal — never hidden-and-stuck.
+     • prefers-reduced-motion: reveal disabled, content shown at rest.
+
+   Tokens: this component animates only transform/opacity; it adds no colour, so
+   it's token-agnostic and safe over any branded surface.
+   ========================================================================== */
+interface Props {
+  class?: string;
+  /** distance (px) children rise from */
+  distance?: number;
+  /** stagger successive children slightly (default true) */
+  stagger?: boolean;
+}
+const { class: className = "", distance = 24, stagger = true } = Astro.props;
+---
+
+<div
+  class:list={["cila-reveal", stagger && "cila-reveal--stagger", className]}
+  style={`--reveal-dist:${distance}px`}
+>
+  <slot />
+</div>
+
+<style>
+  /* Only engage when the browser actually supports scroll-driven animations.
+     Outside this @supports block, children render normally (visible at rest) —
+     so unsupported browsers and SSR/no-JS get the content, never a blank box. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .cila-reveal > :global(*) {
+        /* start hidden+below, then the view() timeline drives it to rest */
+        opacity: 0;
+        transform: translateY(var(--reveal-dist));
+        animation: cila-reveal-in linear forwards;
+        /* tie the animation clock to THIS element's trip through the viewport */
+        animation-timeline: view();
+        /* play between "entering 0%" and "30% into the scrollport", then hold */
+        animation-range: entry 0% cover 30%;
+      }
+
+      /* Stagger: give each successive child a later range start so they don't
+         all resolve at once. Pure CSS, no JS, no setTimeout. */
+      .cila-reveal--stagger > :global(*:nth-child(2)) {
+        animation-range: entry 8% cover 38%;
+      }
+      .cila-reveal--stagger > :global(*:nth-child(3)) {
+        animation-range: entry 14% cover 44%;
+      }
+      .cila-reveal--stagger > :global(*:nth-child(4)) {
+        animation-range: entry 20% cover 50%;
+      }
+      .cila-reveal--stagger > :global(*:nth-child(n + 5)) {
+        animation-range: entry 26% cover 56%;
+      }
+    }
+  }
+
+  @keyframes cila-reveal-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Belt-and-braces reduced-motion freeze (also covers the @supports path). */
+  @media (prefers-reduced-motion: reduce) {
+    .cila-reveal > :global(*) {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+</style>
