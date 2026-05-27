@@ -20,6 +20,7 @@ import {
   buildColorAllowSet,
   canonicalizeColor,
   collectVisibleStyles,
+  isOnTokenBase,
   settle,
 } from './_helpers';
 
@@ -29,8 +30,8 @@ for (const route of ROUTES) {
       await page.goto(route);
       await settle(page);
 
-      const allow = new Set(await buildColorAllowSet(page));
-      expect(allow.size, 'no color tokens resolved off :root').toBeGreaterThan(0);
+      const allow = await buildColorAllowSet(page);
+      expect(allow.length, 'no color tokens resolved off :root').toBeGreaterThan(0);
 
       const styles = await collectVisibleStyles(page);
       const offenders: string[] = [];
@@ -39,7 +40,11 @@ for (const route of ROUTES) {
         const c = canonicalizeColor(raw);
         // Skip empties, fully transparent, and non-resolvable keywords.
         if (!c || c === 'transparent' || c === 'currentcolor') return;
-        if (!allow.has(c)) offenders.push(`${selector} { ${prop}: ${raw} }`);
+        // Membership is alpha-agnostic AND tolerant per channel: opacity
+        // modifiers on a token (`bg-brand/35`, `text-fg-on-brand/80` → rgba /
+        // color-mix-with-transparent) are permitted — only the token's base
+        // r,g,b must match (within compositing/rounding tolerance), not alpha.
+        if (!isOnTokenBase(c, allow)) offenders.push(`${selector} { ${prop}: ${raw} }`);
       };
 
       for (const el of styles) {

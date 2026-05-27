@@ -33,9 +33,23 @@ export default {
   ],
   rules: {
     // ── Ban raw color literals in source: use a var(--token) instead. ────────
+    // Covers legacy (rgb/hsl) AND modern wide-gamut color functions (oklch is
+    // the cila default, plus color()/lab/lch) so a hand-authored
+    // `color: oklch(0.6 0.15 150)` outside the token layer is caught. The
+    // tokens.css/theme.css definition layer is exempt via ignoreFiles above.
     'color-no-hex': true,
     'color-named': 'never',
-    'function-disallowed-list': ['rgb', 'rgba', 'hsl', 'hsla'],
+    'function-disallowed-list': [
+      'rgb',
+      'rgba',
+      'hsl',
+      'hsla',
+      'oklch',
+      'oklab',
+      'color',
+      'lab',
+      'lch',
+    ],
 
     // ── Force color/spacing props to be driven by custom properties. ─────────
     // `expression: '/^var\\(--.+\\)$/'` requires the value to be a token ref.
