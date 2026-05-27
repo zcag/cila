@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.2.2 — 2026-05-27
+
+- **Fix (wow-by-default):** cila had the wow stack since 0.1.x but *under-applied* it — the default was timid editorial (confirmed on a live build). Striking is now the **floor**: design-director defaults to a bold direction with **at least one signature moment** (more if earned) and, for hero-led marketing, **shows the product**, not just tells; the `wow` skill engages **by default** for hero builds (opt out for deliberately minimal); design-reviewer gains an **Impact/wow axis** that fails the timid modes (no signature moment, no hero visual, washed-out contrast, same-weight repetitive sections — "clean but forgettable" no longer passes).
+
 ## 0.2.1 — 2026-05-27
 
 - **Fix (process, from live testing):** `/cila:go` now works in **reviewable chunks with feedback rounds**, not one ~hour-long monolithic build. Added a **first-cut checkpoint** (build the hero + one section / the app shell + one screen, render it, get a vibe/ideas feedback round *before* building the rest), a standing "checkpoint — don't disappear" rule, and a **budget/pace** default: best-of-N, 3D/shader wow, trajectory judging, and exhaustive polish are flagship-depth — opt-in, never auto-bundled into one casual command.

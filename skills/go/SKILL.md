@@ -50,7 +50,7 @@ Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (mar
 
 ## Stage 3 — Build
 **Set `gate_required:true`.** **First cut → checkpoint (anti-marathon):** build *first* a small, representative slice — the **hero + one section** (marketing) or the **app shell + one key screen** (app) — render it, and run a **feedback round** with the user on the vibe / ideas / overall feel. Adjust the direction here, on minutes of work, **before** building the rest. Then build the remaining agreed scope **in chunks** (a few sections/screens at a time, checkpointing between), not one monolithic pass. Build against `DESIGN.md` using `design-tokens`, `icons`, `motion`; no AI-slop defaults; the substance leads, the visual serves it.
-- **Marketing:** write the **real copy** from `CONTENT.md` (`copywriting` + `voice`; anti-slop pass; never lorem) + `frontend-aesthetics`; `wow` skill + `templates/wow` for one standout moment.
+- **Marketing:** write the **real copy** from `CONTENT.md` (`copywriting` + `voice`; anti-slop pass; never lorem) + `frontend-aesthetics`; engage the **`wow`** skill **by default** (`templates/wow`) for **at least one** striking signature moment — *show the product* on hero pages; opt out only for deliberately minimal.
 - **Application:** build from `UX.md` with **`app-ux`** (IA / nav / shell / heuristics), **`ux-states`** (design **every view's full state set** — empty / loading / error / partial — plus forms + data display), and **`a11y-patterns`** (WAI-ARIA component contracts; prefer shadcn-on-Radix, flag hand-rolled). UX microcopy via `voice`. **No dead-end states.**
 → **Exit:** the requested UI is implemented (real copy / all states) and the dev server renders it. State `stage:build`.
 

@@ -1,6 +1,6 @@
 ---
 name: wow
-description: The playbook for jaw-dropping, award-tier hero moments — when and how to deploy 3D, shaders, generative backgrounds, custom hero art, and orchestrated motion without breaking accessibility or performance. Use when a build needs a signature 3D / shader / generative-background / big-motion moment — not for ordinary motion or layout polish.
+description: The playbook for jaw-dropping, award-tier hero moments — 3D, shaders, generative backgrounds, custom hero art, orchestrated motion, showing the product — without breaking accessibility or performance. Use BY DEFAULT for any hero-led marketing build (opt out only for deliberately minimal), and whenever a build should be striking rather than merely tasteful.
 ---
 
 # Wow — the jaw-dropping playbook
@@ -10,7 +10,7 @@ Goal: a hero/experience that makes people stop. The failure mode is two-sided �
 ## First, get the concept (don't reach for tech yet)
 Jaw-dropping starts with an *idea*, not an effect. Before any 3D/shader:
 1. **Anchor on real award-tier work.** Use the `reference-extract` skill — pull 2–3 references from Awwwards/Godly/Land-book (via the Steel MCP) or ones the user names, and decompose the *concept* (what makes it memorable: a single bold gesture, a material, a motion idea), not the pixels.
-2. **Commit to ONE signature moment** from `DESIGN.md`. One unforgettable thing executed flawlessly beats five effects fighting each other. Everything else stays quiet to let it land.
+2. **Commit to at least one signature moment** from `DESIGN.md` — *more if the concept genuinely earns it*, but each must earn its place; don't scatter low-value effects. One unforgettable thing executed flawlessly beats five fighting each other — and two deliberate moments beat one when the concept calls for it. Everything else stays quiet to let them land.
 
 ## The wow menu (tiered by weight — prefer the lightest that achieves the concept)
 

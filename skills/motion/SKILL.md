@@ -5,7 +5,7 @@ description: Add production-grade motion to a cila site — one orchestrated hig
 
 # Motion
 
-**One well-orchestrated moment beats scattered micro-interactions.** Attention is finite; animating everything fatigues it. The sophistication is in the restraint.
+**At least one well-orchestrated moment — and don't scatter low-value micro-interactions.** Attention is finite; animating everything fatigues it. The sophistication is in the restraint.
 
 ## Reveals → native scroll-driven CSS (the default)
 For scroll-reveals (the common case), **default to native `animation-timeline`** — it runs off the main thread, so it doesn't cost INP, and needs no JS / IntersectionObserver:

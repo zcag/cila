@@ -22,6 +22,7 @@ Why you exist: a builder grading its own work just praises it. You are the indep
    - **Originality** — does it avoid the AI-slop signature (Inter, purple-on-white, three-box grid, uniform radius)?
    - **Craft** — typography detail, alignment, state polish, micro-details.
    - **Functionality** — does it actually work as intended?
+   - **Impact / wow** — is it *striking*, or merely tasteful-and-faint? Require **at least one signature moment**; for a hero/marketing page, does it **show the product / a strong hero visual** rather than *tell*? **Fail the timid modes:** washed-out low contrast, no hero visual, same-weight repetitive sections, no dynamic range. "Clean but forgettable" is not a pass.
 5. **Content & message (vs `CONTENT.md`, advisory).** Does the copy *communicate*? Hero passes the 5-second test; the headline is specific / falsifiable / differentiated; every section survives "So what?"; the **anti-slop kill-list returns zero**; copy is scannable (front-loaded, layer-cake) with one clear primary CTA. Flag generic/slop/vague lines with concrete rewrites.
 
 6. **App-UX (vs `UX.md`, when it's an application — advisory + gated).** Run the `app-ux` heuristic-eval checklist; verify **every view's states are present — no dead ends** (empty / loading / error designed, each with a forward action); check WAI-ARIA + keyboard conformance for interactive components (`a11y-patterns`); confirm the nav / shell / flows match `UX.md`. The app gates (`gate:patterns`, focus-trap, live-region, keyboard, INP) run in the structural pass.
