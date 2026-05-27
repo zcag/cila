@@ -36,5 +36,15 @@ If output drifts generic, check for and fix these:
 | "Teal accent everywhere" (Claude tell) | Set the brand accent explicitly in DESIGN.md first |
 | Container soup (>2 nesting levels) | Flatten; structure with grid, not nested wrappers |
 
+## Modern-CSS defaults (2026)
+Reach for the platform before JS or libraries — these are Baseline and reduce both code and AI-slop tells (all progressive-enhancement, `@supports`-guardable):
+- **Container queries over viewport breakpoints** — size components to their *container*, not the window, so they're context-portable (`@container`). Default to these; use viewport media queries only for true page-level layout shifts.
+- **`:has()` over JS state toggles** — parent/sibling-aware styling (selected card, filled field, open state) with no JS class-toggling.
+- **`@scope`** — bound styles to a subtree without BEM/utility-soup leakage; pairs with the component tier.
+- **`@starting-style` for entrance animations** — animate elements *in* (incl. from `display:none` / `popover`) with no JS mounting hooks; guard under reduced-motion.
+- **`text-wrap: balance`** on headings, **`text-wrap: pretty`** on body — kills orphans/ragged lines; an instant "designed by a human" tell, near-zero cost.
+- **CSS anchor positioning** for tethered UI (tooltips, menus, popovers) — `anchor()` / `position-anchor` replaces the Floating UI dep.
+- **Native `popover` / `<dialog>` / invoker commands** for overlays/menus/modals — browser-managed top layer + focus trapping + ESC/light-dismiss = an **a11y correctness win** over hand-rolled modal JS. Prefer these over a JS modal library.
+
 ## How to use
 At direction time, the design-director proposes directions drawn from these families and locks the choice into `DESIGN.md`. During build, if something reads generic, run this list as a checklist and fix at the token/structure level — not with surface tweaks.

@@ -7,9 +7,24 @@ description: Add production-grade motion to a cila site — one orchestrated hig
 
 **One well-orchestrated moment beats scattered micro-interactions.** Attention is finite; animating everything fatigues it. The sophistication is in the restraint.
 
-## Library choice
+## Reveals → native scroll-driven CSS (the default)
+For scroll-reveals (the common case), **default to native `animation-timeline`** — it runs off the main thread, so it doesn't cost INP, and needs no JS / IntersectionObserver:
+```css
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+  }
+}
+@keyframes reveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+```
+Feature-detect with `@supports`; un-enhanced browsers show the static end-state (define `.reveal` at rest, animate only inside the guard). Use **`scroll()`** for progress tied to a scroll container, **`view()`** for an element entering the viewport. Pair with **scroll-state container queries** (`@container scroll-state(stuck: top)`) for sticky-header / pinned-state styling.
+
+**Reach for JS (motion/react, Lenis) only for *scrubbed* or *3D* storytelling** — pinned scenes, scroll-linked 3D, complex sequenced timelines. Don't hand-roll IO reveals when `view()` does it natively.
+
+## Library choice (for the JS cases)
 - **React:** `motion` (import from `motion/react`) — MIT, hybrid WAAPI engine. Prefer it over GSAP for generated output (GSAP is Webflow-owned with a license barring competing tools).
-- **Static HTML / Astro:** CSS-only — staggered `animation-delay`, `@keyframes`, view/scroll timelines where supported. Add `tailwindcss-motion` / `tailwind-animations` for cheap class-based reveals.
+- **Static HTML / Astro:** CSS-only — native scroll-driven timelines (above), staggered `animation-delay`, `@keyframes`. Add `tailwindcss-motion` / `tailwind-animations` for cheap class-based reveals.
+- **Page-to-page / element morphs:** don't animate these by hand — use the `view-transitions` skill (native View Transitions API).
 
 ## Non-negotiable rules
 - **Animate `transform` and `opacity` only** (compositor/GPU). Never `width/height/top/left/margin`; never `transition: all` — list properties.

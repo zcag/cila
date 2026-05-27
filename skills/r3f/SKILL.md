@@ -9,9 +9,13 @@ Reference scenes live in `${CLAUDE_PLUGIN_ROOT}/templates/wow/r3f/` — copy/ada
 
 ## Setup
 - Deps: `three @react-three/fiber @react-three/drei maath`.
+- **Renderer: WebGPU-primary with automatic WebGL2 fallback.** Use R3F's `WebGPURenderer` (`three/webgpu`) — it falls back to WebGL2 transparently where WebGPU is absent. WebGPU is **Baseline (Jan 2026)**, but **mobile support is still fragmented** → the WebGL2 fallback is mandatory, not optional. Test the scene under both backends.
 - **Astro:** mount as a React island — `@astrojs/react`, `<Scene client:visible />` so it only loads/animates when in view.
-- **Next:** `const Scene = dynamic(() => import('./Scene'), { ssr: false })` — WebGL can't SSR.
+- **Next:** `const Scene = dynamic(() => import('./Scene'), { ssr: false })` — WebGL/WebGPU can't SSR.
 - Never block first paint on the 3D bundle; it's an enhancement layered over a real, readable hero.
+
+## Materials: prefer TSL over raw GLSL
+For new/custom materials, write **TSL** (Three.js Shading Language — the node/JS shader API) rather than hand-written GLSL: TSL compiles to **both** WGSL (WebGPU) and GLSL (WebGL2), so one material works across both backends. Raw GLSL only when adapting an existing shader. (See the `shaders` skill.)
 
 ## Performance (most 3D jank is here)
 - **Cap DPR:** `<Canvas dpr={[1, 1.75]}>` — never render at full retina DPR.

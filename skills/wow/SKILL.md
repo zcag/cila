@@ -15,7 +15,8 @@ Jaw-dropping starts with an *idea*, not an effect. Before any 3D/shader:
 ## The wow menu (tiered by weight — prefer the lightest that achieves the concept)
 
 **Tier 1 — zero-dependency (CSS/SVG), works in static Astro:**
-- Animated **mesh-gradient** backgrounds driven by the brand hue; **grain/noise** overlays for depth; **scroll-driven** reveals (`animation-timeline: view()`); CSS 3D transforms / perspective; oversized expressive type with variable-font animation.
+- Animated **mesh-gradient** backgrounds driven by the brand hue; **grain/noise** overlays for depth; **native scroll-driven** reveals (`animation-timeline: scroll()/view()`, off-main-thread — the default for reveals, see `motion`); CSS 3D transforms / perspective; oversized expressive type with variable-font animation.
+- **View Transitions** — animated route changes + hero/heading/image **morphs** across navigation (native, GPU-driven, no library). Often *the* "feels-2026" moment for multi-page sites → the `view-transitions` skill.
 - Reach here first — see `${CLAUDE_PLUGIN_ROOT}/templates/wow/css/` and the `motion` skill.
 
 **Tier 2 — React islands (depth & immersion):**

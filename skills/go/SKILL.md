@@ -25,6 +25,7 @@ Maintain `.cila/state.json` in the project (ensure `.cila/` is gitignored). Shap
 - Set `"gate_required": true` the moment UI changes exist that haven't passed the gates.
 - Set `"gate_required": false` only after the reviewer returns PASS (or the user explicitly chooses to stop).
 - A **Stop-gate hook** reads this and blocks "done" while `gate_required` is `true` — so keep it honest; don't clear it to escape gating.
+- Also keep an **append-only `.cila/progress.md`** (decisions, what passed, what's pending, post-mortems). Each stage **begins by reading `progress.md` + recent git log + the current gate state** before touching code (read-before-act) — so a resumed run continues instead of re-deriving context.
 
 ---
 
@@ -37,7 +38,9 @@ Read `$ARGUMENTS` + the repo: empty vs existing app, framework, Tailwind/tokens,
 - **Message (if there's copy to write):** if no `CONTENT.md`, delegate to the **content-strategist** subagent — positioning, the ONE core message, voice, and the page/section plan, decided *with* the user (the "angle" — their call, like the look). It writes `CONTENT.md`.
 - **Look:** then delegate to **design-director** (it reads `CONTENT.md` so the look serves the message) → `DESIGN.md` + `tokens.css`. It anchors on award-tier references (via Steel) and proposes a direction (one wow/signature moment when apt). For high-stakes / "show me options" / max-wow, use the **`explore`** skill (best-of-N: build 2–3 real candidates, judge on screenshots, the user picks). Existing app whose look stays → capture it via `reference-extract`; don't restyle.
 - If `CONTENT.md` / `DESIGN.md` already exist, use them; don't re-litigate.
-→ **Exit:** a locked `CONTENT.md` (message + section plan + voice) and `DESIGN.md` + `tokens.css` exist, and the user has agreed to **both the message and the look**. Do not proceed without these. State `stage:direction`.
+- **Lean on what's worked before:** design-director/content-strategist consult the **taste profile + example bank** (the `taste` skill — your past edits/preferences + shipped, high-scoring exemplars) to seed the direction.
+- **Freeze the acceptance contract** (`ACCEPTANCE.md`, from `${CLAUDE_PLUGIN_ROOT}/templates/ACCEPTANCE.md`): planner (content-strategist + design-director) and evaluator (design-reviewer) agree on the deterministic gates + visual/message criteria that define "done" — *before* building. Append-only: tick `passes`, never edit/delete a criterion.
+→ **Exit:** locked `CONTENT.md` + `DESIGN.md` + `tokens.css` + a frozen `ACCEPTANCE.md` exist, and the user has agreed to **both the message and the look**. Do not proceed without these. State `stage:direction`.
 
 ## Stage 2 — Materialize  (silent, never clobber)
 Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (marketing) or set up Next for an app; for an existing app, leave its code alone and only add what's missing. Ensure `tokens.css` matches `DESIGN.md`. **Merge** (never overwrite) `components.json` (`@shadcn @magicui @aceternity @origin @cult @reactbits`) and the `${CLAUDE_PLUGIN_ROOT}/templates/gates/` scripts+deps; point `BASE_URL` at the dev server. Append (don't overwrite) a cila note to `CLAUDE.md`. Report it as a one-line "set up the project", not a wall of steps.
@@ -48,8 +51,11 @@ Scaffold a fresh repo from `${CLAUDE_PLUGIN_ROOT}/templates/astro-starter/` (mar
 → **Exit:** the requested UI is implemented with real copy and the dev server renders it. State `stage:build`.
 
 ## Stage 4 — Review & gate  (loop until PASS)
-On entry write `stage:review`. Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md` **and a content/message critique vs `CONTENT.md`** (5-second clarity, "So what?" per section, anti-slop kill-list, scannability, CTA clarity). Then delegate to the **a11y-auditor** for the behavioral accessibility checks axe can't cover (keyboard, focus order/restore, reduced-motion, semantics). Apply all fixes and iterate. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
-→ **Exit:** design-reviewer + a11y-auditor return **PASS** (no hard failures). Then set `gate_required:false` and `stage:done`.
+On entry write `stage:review`. Delegate to the **design-reviewer** subagent: render-health → structural gates → cross-viewport visual critique vs `DESIGN.md` **and a content/message critique vs `CONTENT.md`** (5-second clarity, "So what?" per section, anti-slop kill-list, scannability, CTA clarity). Then delegate to the **a11y-auditor** for the behavioral accessibility checks axe can't cover (keyboard, focus order/restore, reduced-motion, semantics). Apply all fixes and iterate. **Gate order is fixed: deterministic rules → visual-diff vs DESIGN.md → trajectory/LLM judge** — the judge never overrides a hard-rule fail. On a failure, write a one-line post-mortem to `.cila/progress.md` (what failed + why) so the next attempt learns; **accept a change only if it strictly improves** the gate result (no new failures); cap at ~3 iterations before escalating to the user. Heavy hero → use the **showcase** perf profile (`gate:lh:showcase`), but accessibility, reduced-motion, layout, and token gates stay strict. Surface only what matters, in plain terms.
+→ **Exit:** every `ACCEPTANCE.md` criterion is ticked and design-reviewer + a11y-auditor return **PASS** (no hard failures). Then set `gate_required:false` and `stage:done`.
 
 ## Stage 5 — Hand back
-Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout.
+Show the result (a screenshot/preview) in plain language and offer the natural next step. Keep cila's machinery invisible throughout. If the user **edits** what you shipped, that's signal — let the `taste` skill capture the preference for next time.
+
+---
+**Budget:** default `N=3` for `explore` and static-first judging; reserve best-of-N + trajectory judging on *every* candidate for flagship heroes (vision tokens ~3×). Offer draft / standard / flagship depth when cost matters.

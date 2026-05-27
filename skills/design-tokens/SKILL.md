@@ -69,6 +69,14 @@ Derive the whole palette from `--brand-hue` so a single number re-themes everyth
 }
 ```
 
+## Modern-CSS defaults (2026)
+The token system feeds the platform-first patterns — prefer these over JS/libraries (all `@supports`-guardable, reduced-motion-safe). Authored in tokens/components, not bolted on later:
+- **Container queries over viewport breakpoints** — components respond to their *container* (`@container`); reserve viewport media queries for page-level layout. Define `container-type` on layout wrappers.
+- **`:has()` over JS state toggles**; **`@scope`** to bound component styles (pairs with the component tier).
+- **`@starting-style` for entrance animations** — drive durations/easing from `--dur` / `--ease-out` tokens; always inside a `prefers-reduced-motion: no-preference` guard.
+- **`text-wrap: balance`** (headings) / **`pretty`** (body) — near-zero-cost polish, set in base type styles.
+- **CSS anchor positioning** for tethered UI (replaces Floating UI); **native `popover` / `<dialog>` / invoker commands** for overlays (browser-managed top layer + focus = a11y win). (Detail in `frontend-aesthetics`.)
+
 ## Rules
 - **OKLCH only** for color; derive from `--brand-hue`.
 - **No raw hex in components** — only `var(--token)` / Tailwind token utilities. (The token-conformance gate fails builds that violate this.)

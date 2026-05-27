@@ -24,6 +24,9 @@ git worktree add ../<repo>-cand-$i -b cila/explore/cand-$i
 ```
 Spawn a **design-explorer** subagent per worktree, each given its seed + the worktree path. They build in **parallel** (≈ constant wall-clock; cost is ~N× build tokens). Each runs its candidate on its own dev-server port and writes `RESULTS.md`. *Optional:* generate one candidate via an architecturally-different backend (v0 Platform API, opt-in — see `docs/INTEGRATIONS.md`) for extra diversity in the pool.
 
+### 2b. Check *realized* divergence (selection-by-quality-alone causes premature convergence)
+Persona-seeded diversity is a hypothesis — verify it in the *built* result, not the pre-build estimate. Extract a cheap feature vector per candidate (`--brand-hue` + palette, type pairing, layout archetype, motion/wow signature) from each `tokens.css` + DOM and confirm the candidates are actually distinct. If two converged during the build, **drop or re-seed one** — don't waste judging on near-identical pages. Select the pool on the quality-**diversity** front, not quality alone.
+
 ### 3. Judge — pairwise tournament on screenshots (selection, not the gate)
 Hand the candidates to **design-reviewer in pairwise mode**: screenshot each (Playwright), reject any that fail render-health, then run pairwise "A vs B — which better realizes the brief + DESIGN.md?" matches → Elo/ranking. Bias hygiene: **randomize A/B order, critique-before-score, the explorers never judge their own work.** Output a ranked shortlist with the deciding reasons. (Reserve a multi-judge tie-break only if the top two are within a hair.)
 
