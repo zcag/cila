@@ -50,9 +50,9 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 
 **Materialization**
 - [x] materialize step (folded into `/cila:go`) — inspect repo, scaffold-or-overlay, drop tokens/gates/components.json + CLAUDE.md pointer
-- [x] `templates/astro-starter` (build-verified) ; [ ] `templates/next-starter` (when first app needs it)
+- [x] `templates/astro-starter` (build-verified) ; [~] `templates/next-starter` (in progress — build-verified Next.js App Router starter)
 - [x] `templates/gates/` configs
-- [~] Visual-asset wiring — Fontsource fonts in starter ✓ ; Iconify MCP / Pexels+sharp / React Bits backgrounds pending
+- [x] Visual-asset wiring — Fontsource fonts ✓ · icons via Iconify API + npm sets (`skills/icons`) ✓ · Pexels+sharp (`skills/hero-art`) ✓ · animated backgrounds (`templates/wow` + React Bits) ✓
 - [x] brownfield adopt — auto-detected inside `/cila:go` (no flag): capture an existing app's design into `DESIGN.md` without restyling it
 
 **Validation**
@@ -69,7 +69,7 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 - [x] `skills/shaders` — GLSL background recipes (gradient/fbm/domain-warp/grain)
 - [x] Showcase gate profile (`lighthouserc.showcase.json`) + `reduced-motion.spec.ts` hard gate — flex perf for heavy heroes, keep a11y/reduced-motion/layout/tokens strict
 - [x] `templates/wow/` — build-verified reference components (Tier 1 CSS mesh/grain/scroll · Tier 2 R3F shader+3D · orchestrated motion); all honor reduced-motion + compositor-only + brand tokens
-- [x] design-director anchors on award-tier references by default + proposes a wow direction; [ ] Steel-driven retrieval wired end-to-end
+- [x] design-director anchors on award-tier references + proposes a wow direction; Steel-driven retrieval wired via `skills/inspiration`
 - [x] AI hero-art (`skills/hero-art`) — opt-in image-gen MCP wiring (Nano Banana / fal / Replicate) + `sharp` responsive pipeline + LCP/a11y rules; user supplies the key (keyless fallback = shaders/CSS/3D + Pexels)
 - [ ] Light "explore-then-pick": render top-2 hero concepts before committing
 
@@ -89,13 +89,13 @@ Most creative lift is cheap; the visual ceiling ("jaw-dropping") is the priority
 ## Phase 3 — Scale & wow (opt-in)
 
 - [x] Best-of-N: parallel git-worktree explorer subagents → pairwise Elo tournament → human picks (`explore` skill + `design-explorer` subagent + design-reviewer pairwise mode)
-- [~] DPP/max-min diverse-subset selection (in `explore`); multi-judge debate tie-break still pending
-- [ ] Chrome DevTools MCP — CWV (LCP/CLS/INP) as a hard gate
-- [ ] `bin/cila-run` headless loop; PR design-review GitHub Action (`claude-code-action@v1`)
-- [ ] Mobbin MCP + WebSight/Vision2UI offline datasets *(Steel-driven inspiration retrieval moved to Phase 1.5)*
-- [~] Heavier wow at scale: AI hero-art skill ✓ (`skills/hero-art`); 3D model/asset pipelines (poly.pizza / Poly Haven) still pending *(best-of-N hero exploration done — see `explore`; `r3f`/`shaders` + components landed in Phase 1.5)*
-- [ ] Figma Dev Mode MCP + Code to Canvas (optional design source/roundtrip)
-- [ ] Optional v0 Platform API as an architecturally-different generator
+- [x] DPP/max-min diverse-subset selection (in `explore`) + multi-judge tie-break panel (in `design-reviewer`)
+- [x] CWV hard gate via Lighthouse CI (default + showcase profiles); Chrome DevTools MCP documented opt-in for interaction-driven INP/trace profiling (`docs/INTEGRATIONS.md`)
+- [—] Headless `cila-run` + PR design-review Action — **cut** (user opted out of headless/automation)
+- [x] Inspiration retrieval (`skills/inspiration`): Steel-driven galleries (free, default) + Mobbin MCP (opt-in) + WebSight/Vision2UI datasets
+- [x] Heavier wow: AI hero-art (`skills/hero-art`) + 3D asset pipelines (`skills/3d-assets` — Poly Haven CC0 / poly.pizza) *(best-of-N done — `explore`; `r3f`/`shaders` + components in Phase 1.5)*
+- [x] Figma Dev Mode MCP + Code-to-Canvas — documented opt-in (`docs/INTEGRATIONS.md`)
+- [x] v0 Platform API — documented opt-in explorer backend for best-of-N (`docs/INTEGRATIONS.md`)
 
 ---
 

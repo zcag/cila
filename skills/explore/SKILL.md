@@ -22,7 +22,7 @@ For each seed `i`:
 ```
 git worktree add ../<repo>-cand-$i -b cila/explore/cand-$i
 ```
-Spawn a **design-explorer** subagent per worktree, each given its seed + the worktree path. They build in **parallel** (≈ constant wall-clock; cost is ~N× build tokens). Each runs its candidate on its own dev-server port and writes `RESULTS.md`.
+Spawn a **design-explorer** subagent per worktree, each given its seed + the worktree path. They build in **parallel** (≈ constant wall-clock; cost is ~N× build tokens). Each runs its candidate on its own dev-server port and writes `RESULTS.md`. *Optional:* generate one candidate via an architecturally-different backend (v0 Platform API, opt-in — see `docs/INTEGRATIONS.md`) for extra diversity in the pool.
 
 ### 3. Judge — pairwise tournament on screenshots (selection, not the gate)
 Hand the candidates to **design-reviewer in pairwise mode**: screenshot each (Playwright), reject any that fail render-health, then run pairwise "A vs B — which better realizes the brief + DESIGN.md?" matches → Elo/ranking. Bias hygiene: **randomize A/B order, critique-before-score, the explorers never judge their own work.** Output a ranked shortlist with the deciding reasons. (Reserve a multi-judge tie-break only if the top two are within a hair.)
