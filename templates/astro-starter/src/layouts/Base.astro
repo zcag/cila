@@ -1,0 +1,84 @@
+---
+// Base.astro — document shell. Loads tokens + globals, preloads the two
+// latin-subset variable woff2 files, sets meta / color-scheme / theme-color,
+// and applies the stored color scheme before paint (no flash of wrong theme).
+import "../styles/tokens.css"; // tokens FIRST (source of truth)
+import "../styles/global.css"; // then fonts + resets
+
+// Self-hosted woff2 paths (Fontsource ships these under the package's /files).
+// Vite resolves the bare specifier; preloading the latin range kills FOUT.
+import bricolageWoff2 from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
+import hankenWoff2 from "@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "cila starter",
+  description = "A cila-generated marketing site. Edit DESIGN.md + src/styles/tokens.css.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+
+    <!-- Light + dark theme colors (the address bar tints to match scheme). -->
+    <meta
+      name="theme-color"
+      content="#fbfdfb"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0f1411"
+      media="(prefers-color-scheme: dark)"
+    />
+
+    <!-- Preload the two display/body variable faces (latin subset). -->
+    <link
+      rel="preload"
+      href={bricolageWoff2}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={hankenWoff2}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Open Graph / social (fill these in per site). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url.href} />
+
+    <!-- No-flash color scheme: honor a saved choice, else system. Runs pre-paint. -->
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("theme");
+        const dark =
+          saved === "dark" ||
+          (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "cila-astro-starter",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "cila marketing/landing starter — Astro + Tailwind v4 (CSS-first @theme) + OKLCH tokens + self-hosted Fontshare-class variable fonts.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^6.3.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.10",
+    "@fontsource-variable/hanken-grotesk": "^5.2.8",
+    "vite": "^7"
+  }
+}

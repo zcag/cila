@@ -1,0 +1,178 @@
+/* ============================================================================
+   tokens.css — THE SINGLE SOURCE OF TRUTH for this site's design system.
+   Tailwind v4, CSS-first. No tailwind.config.js. No hardcoded hex anywhere else.
+
+   How this file is organized:
+     1.  @import "tailwindcss"        — pulls in the engine.
+     2.  :root knobs                  — the ONE brand hue + ramp inputs (edit here).
+     3.  @theme                       — semantic tokens → Tailwind utilities.
+     4.  .dark overrides              — dark-mode remaps of the SAME semantic names.
+
+   ── WHERE TO CHANGE THE BRAND ──────────────────────────────────────────────
+   Change ONE number — `--brand-hue` in :root below (OKLCH hue, 0–360).
+   Every accent, gradient, focus ring, and hover state is derived from it via
+   OKLCH, so re-hueing the whole site is a single-line edit. Lightness/chroma
+   ramps are also exposed as knobs if you want to push vivid vs. muted.
+
+   Why OKLCH: perceptually uniform — equal lightness reads as equal lightness
+   across hues, so a hue swap keeps contrast/legibility intact (unlike HSL).
+
+   Anti-slop guardrails baked in (see docs/RESEARCH.md §2):
+     • Default hue is 150 (a deep botanical green), NOT 265 (the Tailwind-indigo
+       slop default). Re-hue freely, but don't drift back to 250–280.
+     • Fonts are Bricolage Grotesque (display) + Hanken Grotesk (body), NOT Inter.
+     • Radii/shadows are intentional, not the uniform 16px / 0.1-opacity tells.
+   ========================================================================== */
+
+@import "tailwindcss";
+
+/* Enable class-based dark mode: `<html class="dark">` (no media-query lock-in). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1. KNOBS — the only inputs you normally touch.
+   ──────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* THE brand hue. OKLCH hue angle, 0–360. This is the knob. */
+  --brand-hue: 150; /* deep botanical green. try 25=terracotta, 200=teal-blue, 85=acid-lime */
+
+  /* A complementary/secondary hue for the accent's counterpart (used sparingly).
+     Default = brand + 195° for a tense, non-obvious pairing. */
+  --accent-hue: 345; /* warm magenta-rose, plays against the green */
+
+  /* Chroma (saturation) ceilings. Lower = more muted/editorial, higher = louder.
+     OKLCH chroma is roughly 0 (gray) → ~0.37 (max displayable). */
+  --chroma-brand: 0.15;
+  --chroma-accent: 0.17;
+  --chroma-surface: 0.012; /* the faint hue tint carried into "neutral" surfaces */
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2. @theme — semantic tokens. These generate Tailwind utilities:
+      --color-* → bg-/text-/border-*, --font-* → font-*, --radius-* → rounded-*,
+      --spacing → the entire spacing scale, --text-* → text-* sizes.
+   ──────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ---- Spacing: strict 4px base. `--spacing` makes p-1=4px, p-2=8px, … (v4). --- */
+  --spacing: 0.25rem; /* 4px. Every gap/padding is a multiple of this. */
+
+  /* ---- Type families (self-hosted via Fontsource; see global.css) ----------- */
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  /* alias so `font-sans` resolves to the body face instead of Tailwind's default */
+  --font-sans: var(--font-body);
+
+  /* ---- Modular type scale (ratio ≈ 1.25 "major third", with a big display jump).
+     Distinctive = extremes, not adjacents: tight body, dramatic display. ------ */
+  --text-xs: 0.79rem;
+  --text-sm: 0.889rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.266rem;
+  --text-2xl: 1.583rem;
+  --text-3xl: 1.979rem;
+  --text-4xl: 2.474rem;
+  --text-5xl: 3.092rem;
+  --text-6xl: 3.866rem;
+  --text-7xl: 4.832rem; /* hero display — pairs with tight tracking + opsz */
+
+  /* paired line-heights */
+  --text-xs--line-height: 1.5;
+  --text-sm--line-height: 1.55;
+  --text-base--line-height: 1.6;
+  --text-lg--line-height: 1.55;
+  --text-xl--line-height: 1.4;
+  --text-2xl--line-height: 1.25;
+  --text-3xl--line-height: 1.15;
+  --text-4xl--line-height: 1.08;
+  --text-5xl--line-height: 1.04;
+  --text-6xl--line-height: 1.0;
+  --text-7xl--line-height: 0.96;
+
+  /* ---- Radii: intentional, NOT a uniform 16px. Small UI tight, cards softer. - */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2.25rem;
+  --radius-full: 9999px;
+
+  /* ---- Shadows: layered + hue-tinted, NOT flat black @ 0.1 opacity ---------- */
+  --shadow-sm: 0 1px 2px oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.06);
+  --shadow-md:
+    0 2px 4px oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.05),
+    0 8px 24px oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.08);
+  --shadow-lg:
+    0 4px 8px oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.06),
+    0 24px 48px -12px oklch(0.4 var(--chroma-brand) var(--brand-hue) / 0.18);
+
+  /* ====== SEMANTIC COLORS (light mode is the default below; dark overrides §3)
+     All derived from --brand-hue / --accent-hue. Name by ROLE, never by hue,
+     so dark mode and re-hueing are pure value swaps. ======= */
+
+  /* surfaces — near-neutral, carrying a whisper of brand hue for cohesion */
+  --color-bg: oklch(0.99 var(--chroma-surface) var(--brand-hue));
+  --color-surface: oklch(0.975 var(--chroma-surface) var(--brand-hue));
+  --color-surface-raised: oklch(1 0 0);
+  --color-overlay: oklch(0.2 var(--chroma-surface) var(--brand-hue) / 0.55);
+
+  /* text */
+  --color-fg: oklch(0.22 0.02 var(--brand-hue));
+  --color-fg-muted: oklch(0.5 0.018 var(--brand-hue));
+  --color-fg-subtle: oklch(0.62 0.014 var(--brand-hue));
+  --color-fg-on-brand: oklch(0.99 0.01 var(--brand-hue)); /* text on a brand fill */
+
+  /* borders / lines */
+  --color-border: oklch(0.9 0.012 var(--brand-hue));
+  --color-border-strong: oklch(0.82 0.018 var(--brand-hue));
+
+  /* brand ramp (the accent identity) */
+  --color-brand: oklch(0.55 var(--chroma-brand) var(--brand-hue));
+  --color-brand-hover: oklch(0.5 var(--chroma-brand) var(--brand-hue));
+  --color-brand-soft: oklch(0.95 0.04 var(--brand-hue));
+  --color-brand-strong: oklch(0.42 var(--chroma-brand) var(--brand-hue));
+
+  /* secondary accent (use sparingly — the tension color) */
+  --color-accent: oklch(0.62 var(--chroma-accent) var(--accent-hue));
+  --color-accent-soft: oklch(0.95 0.045 var(--accent-hue));
+
+  /* focus ring */
+  --color-ring: oklch(0.55 var(--chroma-brand) var(--brand-hue));
+
+  /* status (hues fixed by convention; lightness/chroma tuned to match the set) */
+  --color-success: oklch(0.62 0.15 150);
+  --color-warning: oklch(0.75 0.16 75);
+  --color-danger: oklch(0.58 0.2 25);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. DARK MODE — remap the SAME semantic names. Nothing downstream changes.
+      Brightness is inverted via OKLCH lightness; hue/chroma intent preserved.
+   ──────────────────────────────────────────────────────────────────────────── */
+.dark {
+  --color-bg: oklch(0.17 0.012 var(--brand-hue));
+  --color-surface: oklch(0.2 0.014 var(--brand-hue));
+  --color-surface-raised: oklch(0.24 0.016 var(--brand-hue));
+  --color-overlay: oklch(0.1 0.01 var(--brand-hue) / 0.65);
+
+  --color-fg: oklch(0.95 0.012 var(--brand-hue));
+  --color-fg-muted: oklch(0.72 0.016 var(--brand-hue));
+  --color-fg-subtle: oklch(0.58 0.014 var(--brand-hue));
+  --color-fg-on-brand: oklch(0.16 0.01 var(--brand-hue));
+
+  --color-border: oklch(0.3 0.016 var(--brand-hue));
+  --color-border-strong: oklch(0.42 0.02 var(--brand-hue));
+
+  /* brand reads brighter on dark to hold its presence */
+  --color-brand: oklch(0.72 calc(var(--chroma-brand) * 0.95) var(--brand-hue));
+  --color-brand-hover: oklch(0.78 var(--chroma-brand) var(--brand-hue));
+  --color-brand-soft: oklch(0.3 0.05 var(--brand-hue));
+  --color-brand-strong: oklch(0.82 var(--chroma-brand) var(--brand-hue));
+
+  --color-accent: oklch(0.72 calc(var(--chroma-accent) * 0.95) var(--accent-hue));
+  --color-accent-soft: oklch(0.3 0.06 var(--accent-hue));
+
+  --color-ring: oklch(0.72 var(--chroma-brand) var(--brand-hue));
+}

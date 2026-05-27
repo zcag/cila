@@ -1,0 +1,25 @@
+{
+  "name": "cila-gates",
+  "private": true,
+  "type": "module",
+  "description": "Production-quality gates dropped in by cila — structural (hard) + perceptual (advisory).",
+  "scripts": {
+    "gate:tokens": "playwright test token-conformance spacing-scale && stylelint \"src/**/*.css\"",
+    "gate:layout": "playwright test layout-invariants",
+    "gate:a11y": "playwright test a11y",
+    "gate:visual": "playwright test visual-regression",
+    "gate:visual:update": "playwright test visual-regression --update-snapshots",
+    "gate:lh": "lhci autorun",
+    "gate:structural": "npm run gate:tokens && npm run gate:layout && npm run gate:a11y",
+    "gate": "npm run gate:structural && npm run gate:visual && npm run gate:lh",
+    "gate:report": "playwright show-report .gate-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.60.0",
+    "stylelint": "^17.12.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-declaration-strict-value": "^1.11.1"
+  }
+}

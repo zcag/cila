@@ -6,13 +6,13 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 
 ---
 
-## Phase 0 — Repo & docs  `[~]`
+## Phase 0 — Repo & docs  `[x]`
 
 - [x] Create repo `~/proj/cila`, git init
 - [x] Research archive (`docs/RESEARCH.md`)
 - [x] Architecture (`docs/ARCHITECTURE.md`), roadmap, decisions
-- [ ] Private GitHub repo + push
-- [ ] Local marketplace wiring validated (install cila into a scratch repo)
+- [x] Private GitHub repo + push (`zcag/cila`)
+- [ ] Local marketplace wiring validated (install cila into a scratch repo) → see Phase 1 Validation
 
 ---
 
@@ -21,39 +21,41 @@ Status legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a project from aesthetic direction → gorgeous, gated, shipped page.
 
 **Plugin skeleton**
-- [ ] `plugin.json` manifest (+ `dependencies: frontend-design`, `version`, `userConfig` for viewports/perf budgets)
-- [ ] `marketplace.json` (installable)
-- [ ] `.mcp.json` — shadcn (+ `@magicui @aceternity @origin @cult @kokonutui @tailark @reactbits`), playwright
+- [x] `plugin.json` manifest  *(basic; `dependencies: frontend-design` + `userConfig` deferred to install-validation)*
+- [x] `marketplace.json` (installable)
+- [x] `.mcp.json` — shadcn + playwright  *(registry list lives in the starter's `components.json`)*
 
 **Collaborative design**
-- [ ] `/cila:design` command + `design-director` subagent — verbalized sampling (propose 3–5 distinct directions w/ rationale), decide *with* the user, write locked `DESIGN.md`
-- [ ] `templates/DESIGN.md` (tokens, type, motion, brand-origin, 9-section structure)
-- [ ] `skills/design-tokens` — OKLCH, Tailwind v4 `@theme`, single `--brand-hue`; tweakcn integration
-- [ ] `skills/reference-extract` — decompose a reference (brandmd/design-extract) into tokens
+- [x] `/cila:design` command + `design-director` subagent — verbalized sampling, decide *with* the user, write locked `DESIGN.md`
+- [x] `templates/DESIGN.md` (aesthetic direction, negative constraints, tokens, type, motion, components)
+- [x] `skills/design-tokens` — OKLCH, Tailwind v4 `@theme`, single `--brand-hue`; tweakcn seeding
+- [x] `skills/reference-extract` — decompose a reference (brandmd/design-extract) into tokens
 
 **Build + visual loop**
-- [ ] `agents/design-reviewer` (evaluator) — Playwright MCP in its own context; screenshot matrix (360/768/1024/1440 × light/dark × states); render-health gate; critique vs DESIGN.md; pivot-or-refine; strictly-better acceptance
-- [ ] `/cila:review` command
-- [ ] `skills/motion` — Motion (`motion/react`) snippets + `prefers-reduced-motion` guardrails
-- [ ] `skills/frontend-aesthetics` — cila aesthetic-family presets (from awesome-claude-design), extends official skill
+- [x] `agents/design-reviewer` (evaluator) — Playwright MCP; screenshot matrix; render-health gate; critique vs DESIGN.md; pivot-or-refine; strictly-better acceptance
+- [x] `/cila:review` command
+- [x] `skills/motion` — Motion (`motion/react`) + `prefers-reduced-motion` + compositor-only
+- [x] `skills/frontend-aesthetics` — 9 families + AI-slop fingerprint counters
 
 **Production gates (derived from DESIGN.md)**
-- [ ] `agents/a11y-auditor` + axe-core (WCAG 2.2 AA tags)
-- [ ] Token-conformance check (computed-style vs `:root` tokens)
-- [ ] Layout-invariant checks (no h-scroll, overflow, overlap, touch targets) across viewport matrix
-- [ ] Lighthouse CI budgets
-- [ ] design-lint (token/component drift)
-- [ ] Playwright visual regression (masked, animations disabled)
-- [ ] `hooks/hooks.json` — `Stop`/`SubagentStop` gate before "done"
+- [x] `agents/a11y-auditor` + axe-core (WCAG 2.2 AA tags)
+- [x] Token-conformance check (computed-style vs `:root` tokens)
+- [x] Layout-invariant checks (no h-scroll, overflow, overlap, touch targets) across viewport matrix
+- [x] Spacing-grid + type-scale conformance
+- [x] Lighthouse CI budgets (LCP/CLS/TBT + non-composited-animations)
+- [x] design-lint (`stylelint.config.mjs` — bans raw hex, forces `var(--token)`)
+- [x] Playwright visual regression (masked, animations disabled)
+- [x] `hooks/hooks.json` — SessionStart contract announcement  *(hard `Stop`/`SubagentStop` gate deferred — relying on `/cila:review` + CI for now)*
 
 **Materialization**
-- [ ] `/cila:init` — inspect repo, pick Astro vs Next, drop tokens/DESIGN.md/gates/components.json + CLAUDE.md pointer
-- [ ] `templates/astro-starter` (first), `templates/next-starter` (when first app needs it)
-- [ ] `templates/gates/` configs
-- [ ] Visual-asset wiring: Fontsource/Fontshare, Iconify MCP, Pexels/sharp, React Bits backgrounds
+- [x] `/cila:init` — inspect repo, scaffold-or-overlay, drop tokens/DESIGN.md/gates/components.json + CLAUDE.md pointer
+- [x] `templates/astro-starter` (build-verified) ; [ ] `templates/next-starter` (when first app needs it)
+- [x] `templates/gates/` configs
+- [~] Visual-asset wiring — Fontsource fonts in starter ✓ ; Iconify MCP / Pexels+sharp / React Bits backgrounds pending
+- [ ] `/cila:init --adopt` — brownfield: capture an existing app's design into `DESIGN.md` (proposed)
 
 **Validation**
-- [ ] Take a real landing page through `/cila:design` → build → `/cila:review` → gates
+- [ ] Install cila (local marketplace) and take a real landing page through `/cila:design` → build → `/cila:review` → gates
 
 ---
 
