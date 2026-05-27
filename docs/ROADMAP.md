@@ -50,7 +50,7 @@ Mostly config + prompts. 100% free. Goal: a genuinely great rig that takes a pro
 
 **Materialization**
 - [x] materialize step (folded into `/cila:go`) — inspect repo, scaffold-or-overlay, drop tokens/gates/components.json + CLAUDE.md pointer
-- [x] `templates/astro-starter` (build-verified) ; [~] `templates/next-starter` (in progress — build-verified Next.js App Router starter)
+- [x] `templates/astro-starter` + `templates/next-starter` — both build-verified, identical OKLCH token contract (marketing vs app)
 - [x] `templates/gates/` configs
 - [x] Visual-asset wiring — Fontsource fonts ✓ · icons via Iconify API + npm sets (`skills/icons`) ✓ · Pexels+sharp (`skills/hero-art`) ✓ · animated backgrounds (`templates/wow` + React Bits) ✓
 - [x] brownfield adopt — auto-detected inside `/cila:go` (no flag): capture an existing app's design into `DESIGN.md` without restyling it
