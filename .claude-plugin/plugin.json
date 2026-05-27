@@ -1,6 +1,6 @@
 {
   "name": "cila",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A portable design studio for Claude Code — produces gorgeous, production-grade websites via collaborative aesthetic direction, a token-locked design contract, premium component registries, a visual-critique build loop, and machine-checkable production gates.",
   "author": { "name": "Cagdas" },
   "license": "MIT",

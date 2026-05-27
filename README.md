@@ -1,6 +1,6 @@
 # cila
 
-**A design studio for Claude Code.** Describe what you want — *"a landing page for a climate-data startup"* — and cila builds a site that looks **designed**, reads like a **pro wrote the copy**, and **passes production gates**. Not another generator of purple-gradient, Inter-font, three-card AI slop.
+**A design studio for Claude Code.** Describe what you want — *"a landing page for a climate-data startup"* or *"a dashboard for my analytics tool"* — and cila builds a site **or app** that looks **designed**, reads like a **pro wrote the copy**, is **structured like a senior UX designer laid it out**, and **passes production gates**. Not another generator of purple-gradient, Inter-font, three-card AI slop.
 
 cila is a self-contained Claude Code **plugin**. Install it once; from then on a single entry point (`/cila:go`) — or just describing a site — runs the whole thing.
 
@@ -34,6 +34,7 @@ The throughline: **the gates and the contract make taste accountable; the expert
 ## What makes it different
 
 - **All three legs, not just pixels.** A gorgeous shell with "Welcome to our platform" copy still fails. cila does the message, the look, *and* the hardening.
+- **Marketing *and* apps.** cila branches by project type — conversion copy + StoryBrand for marketing pages; interaction-design craft (IA, app shell, the full state matrix, WAI-ARIA components, "no dead-end states") for dashboards/tools — instead of forcing landing-page framing onto an app.
 - **One door, zero jargon.** You collaborate on the *look and the message*; everything technical (framework, scaffolding, gates, tokens) is handled silently.
 - **Distinctive by construction.** It commits to a bold aesthetic and bans the AI-slop signature — the output is meant to look like *a* studio made it, not *the* studio every AI makes.
 - **Honest about scope.** cila is **build-time only**. It does not instrument, monitor, or run experiments on your deployed site. Deployment is yours.

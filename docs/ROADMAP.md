@@ -88,6 +88,20 @@ Researched in `docs/RESEARCH-CONTENT.md` (positioning · conversion copy · voic
 
 ---
 
+## App-UX track — Application/interface design (core: the second project type)
+
+Researched in `docs/RESEARCH-APP-UX.md`. `/cila:go` branches marketing-site ↔ application; apps get a distinct brain.
+
+- [x] `ux-architect` subagent + `UX.md` contract (IA · nav/shell · routes · key-screens × states · flows · dashboard)
+- [x] `app-ux` skill — interaction heuristics (Nielsen/Norman/Laws of UX/Refactoring-UI) + IA/nav/shell/dashboards + heuristic-eval
+- [x] `ux-states` skill — full state matrix + forms + data display + "no dead-end states"
+- [x] `a11y-patterns` skill — WAI-ARIA APG component contracts + headless ecosystem + app-a11y-beyond-axe
+- [x] App gates — keyboard-operable widgets, live-region, ARIA pattern conformance, focus-trap, INP (warn-level); no-dead-end-states reviewer-enforced
+- [x] `/cila:go` branches on project type (Stage 0/1/3/4); design-director density craft; reviewer app-UX critique
+- [x] Next starter → app shell (build-verified); Astro stays marketing
+
+---
+
 ## Phase 2 — Compounding (gets better with use)
 
 - [ ] Taste profile (`taste/*.md` in `${CLAUDE_PLUGIN_DATA}`) + SessionStart hook injection
