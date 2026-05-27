@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f DESIGN.md && echo '[cila] This repo is cila-enabled and has a DESIGN.md design contract. Read it and treat it as the source of truth for all UI work; run `npm run gate` before shipping.' || true"
+          }
+        ]
+      }
+    ]
+  }
+}
