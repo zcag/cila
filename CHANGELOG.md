@@ -2,6 +2,10 @@
 
 Versioning is **pinned**: each release bumps `version` in `.claude-plugin/plugin.json` and is tagged `cila--v<version>`. Users update with `/plugin marketplace update cila-marketplace` → `/plugin update cila@cila-marketplace` → `/reload-plugins`, and verify with `/plugin list` (should show this version).
 
+## 0.1.1 — 2026-05-27
+
+- **Fix (install-breaking):** removed the hard `frontend-design` dependency. Declared cross-marketplace, it resolved to `frontend-design@cila-marketplace` (wrong marketplace) and errored on install. frontend-design is **pre-installed by default** (pre-configured `claude-plugins-official` marketplace) and its rules are inlined in cila's prompts — so it's now a **recommended companion, not a dependency**. Also dropped the now-unneeded `allowCrossMarketplaceDependenciesOn` from the marketplace manifest.
+
 ## 0.1.0 — 2026-05-27
 
 First public release. cila covers all three legs of web design — **content + visual + production**.
